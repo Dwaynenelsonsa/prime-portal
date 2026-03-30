@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prime Engineering Solutions | Practical Engineering Support</title>
+  <meta name="description" content="Prime Engineering Solutions helps manufacturers cut downtime, fix repeat failures, and build stronger engineering systems." />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --light: #e5e7eb;
+      --accent: #0ea5e9;
+      --accent-dark: #0284c7;
+      --section: #f8fafc;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      --radius: 18px;
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: #fff;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(92%, var(--max));
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--bg);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      gap: 18px;
+    }
+
+    .brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .portal-link {
+  background: var(--accent);
+  color: #fff !important;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  display: inline-block;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.portal-link:hover {
+  background: var(--accent-dark);
+  color: #fff !important;
+}
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #111827 50%, #1e293b 100%);
+      color: #fff;
+      padding: 84px 0 72px;
+    }
+
+    .hero-wrap {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-logo-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 170px;
+    }
+
+    .hero-logo-top img {
+      max-width: 320px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: rgba(14, 165, 233, 0.12);
+      color: #7dd3fc;
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.86);
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin-bottom: 26px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      background: transparent;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card,
+    .panel,
+    .service,
+    .step,
+    .contact-box {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      padding: 20px;
+      color: var(--text);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      margin-bottom: 14px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .about-grid,
+    .service-grid,
+    .steps,
+    .contact-grid,
+    .proof-grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .about-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 28px;
+    }
+
+    .panel p + p {
+      margin-top: 14px;
+    }
+
+    .service-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .service {
+      padding: 26px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .service h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .service p {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .service ul {
+      padding-left: 18px;
+      color: var(--text);
+    }
+
+    .service li + li {
+      margin-top: 8px;
+    }
+
+    .light {
+      background: var(--section);
+    }
+
+    .proof-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .proof-item {
+      padding: 24px;
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow);
+    }
+
+    .proof-item h3 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: var(--accent-dark);
+    }
+
+    .proof-item p {
+      color: var(--muted);
+    }
+
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .step {
+      padding: 24px;
+    }
+
+    .step .num {
+      width: 40px;
+      height: 40px;
+      display: inline-grid;
+      place-items: center;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 50%;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .step h3 {
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      color: var(--muted);
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .contact-box {
+      padding: 28px;
+    }
+
+    .contact-box p {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .contact-list {
+      list-style: none;
+      margin-top: 16px;
+    }
+
+    .contact-list li + li {
+      margin-top: 10px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    footer {
+      background: var(--bg-soft);
+      color: rgba(255,255,255,0.85);
+      padding: 26px 0;
+    }
+
+    .footer-wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .hero-wrap,
+      .about-grid,
+      .service-grid,
+      .steps,
+      .contact-grid,
+      .proof-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-logo-top {
+        min-height: auto;
+        margin-bottom: 8px;
+      }
+
+      .hero-logo-top img {
+        max-width: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="#home" class="brand">Prime Engineering Solutions</a>
+      <nav class="nav-links">
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#proof">Why Us</a>
+  <a href="#contact">Contact</a>
+  <a href="portal.html" class="portal-link">Client Portal</a>
+</nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-wrap">
+        <div>
+          <span class="eyebrow">Practical engineering support for manufacturers</span>
+          <h1>Cut downtime, fix repeat failures, and build an engineering team that actually performs.</h1>
+          <p>
+            Prime Engineering Solutions helps food, manufacturing, and industrial sites get out of firefighting mode and into proper engineering control.
+          </p>
+          <div class="cta-row">
+            <a href="#contact" class="btn btn-primary">Get In Touch</a>
+            <a href="#services" class="btn btn-secondary">View Services</a>
+          </div>
+          <p>
+            Based in Meath and supporting businesses that need real help on maintenance, reliability, and engineering structure.
+          </p>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-logo-top">
+            <img src="logo.png" alt="Prime Engineering Solutions logo" />
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-card">
+              <strong>15+</strong>
+              <span>Years of hands on engineering and operations experience</span>
+            </div>
+            <div class="stat-card">
+              <strong>€2M</strong>
+              <span>Product loss saved through practical engineering action</span>
+            </div>
+            <div class="stat-card">
+              <strong>€1.2M</strong>
+              <span>Budget control experience with €20M CAPEX planning</span>
+            </div>
+            <div class="stat-card">
+              <strong>88%</strong>
+              <span>Business growth delivered through practical improvement and leadership</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <h2>Built by someone who has actually lived the problems</h2>
+          <p>
+            This is not generic consultancy. It is practical support for sites dealing with breakdown pressure, weak systems, poor planning, and constant production demands.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <div class="panel">
+            <p>
+              I bring practical engineering support based on real work across operations, maintenance, reliability, safety, and leadership.
+            </p>
+            <p>
+              The aim is simple. Help you regain control of downtime, tighten up the basics, and build an engineering function that works in the real world.
+            </p>
+            <p>
+              Clear priorities. Straight advice. Fixes your team can actually use.
+            </p>
+          </div>
+
+          <div class="panel">
+            <h3>Typical problems we help with</h3>
+            <ul>
+              <li>Too much firefighting and not enough planned maintenance</li>
+              <li>Repeat failures on critical equipment</li>
+              <li>Poor engineering structure and weak reporting</li>
+              <li>Missing systems for parts, contractors, and job control</li>
+              <li>Pressure from production with no clear engineering plan</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="light" id="services">
+      <div class="container">
+        <div class="section-head">
+          <h2>Services</h2>
+          <p>
+            Straight up engineering support for sites that need structure, reliability, and better day to day control.
+          </p>
+        </div>
+
+        <div class="service-grid">
+          <article class="service">
+            <h3>Set up or rebuild your engineering department</h3>
+            <p>Put the right structure in place so the department can actually function properly.</p>
+            <ul>
+              <li>Department structure and roles</li>
+              <li>Maintenance planning basics</li>
+              <li>Work order flow and reporting</li>
+              <li>Contractor and job control support</li>
+            </ul>
+          </article>
+
+          <article class="service">
+            <h3>Reduce breakdowns and improve reliability</h3>
+            <p>Cut repeat failures and focus your effort on the equipment that hurts you most.</p>
+            <ul>
+              <li>Critical asset review</li>
+              <li>Failure pattern analysis</li>
+              <li>PM improvement plans</li>
+              <li>Downtime reduction support</li>
+            </ul>
+          </article>
+
+          <article class="service">
+            <h3>Fix weak maintenance systems and reporting</h3>
+            <p>Clean up the day to day process so engineering can support production properly.</p>
+            <ul>
+              <li>Workflow improvement</li>
+              <li>Root cause reviews</li>
+              <li>Practical KPI tracking</li>
+              <li>Better communication and escalation flow</li>
+            </ul>
+          </article>
+
+          <article class="service">
+            <h3>Support engineering leaders with practical advice</h3>
+            <p>Ongoing support for supervisors, managers, and business owners who need a solid second set of eyes.</p>
+            <ul>
+              <li>Site reviews and advice</li>
+              <li>Leadership support</li>
+              <li>Project and CAPEX input</li>
+              <li>Practical direction for teams under pressure</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="proof">
+      <div class="container">
+        <div class="section-head">
+          <h2>Proven results</h2>
+          <p>
+            Real experience. Real pressure. Real outcomes.
+          </p>
+        </div>
+
+        <div class="proof-grid">
+          <div class="proof-item">
+            <h3>15+</h3>
+            <p>Years across engineering, operations, maintenance, and leadership roles.</p>
+          </div>
+          <div class="proof-item">
+            <h3>€2M</h3>
+            <p>Saved in product loss through practical engineering action.</p>
+          </div>
+          <div class="proof-item">
+            <h3>€1.2M</h3>
+            <p>Budget control experience with €20M CAPEX planning.</p>
+          </div>
+        </div>
+        <div class="proof-grid" style="margin-top: 22px;">
+          <div class="proof-item">
+            <h3>3</h3>
+            <p>Promotions in five years through performance and results.</p>
+          </div>
+          <div class="proof-item">
+            <h3>88%</h3>
+            <p>Business growth delivered through practical improvement and leadership.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="light">
+      <div class="container">
+        <div class="section-head">
+          <h2>How it works</h2>
+          <p>
+            Keep it simple. Understand the problem, find the gaps, and put practical fixes in place.
+          </p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <h3>Talk</h3>
+            <p>We go through your current issues, downtime pain points, and what is not working.</p>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <h3>Review</h3>
+            <p>I assess the setup, look at weak spots, and identify the biggest opportunities first.</p>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <h3>Fix</h3>
+            <p>We put practical steps in place that your team can actually use and stick with.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h2>Let’s talk</h2>
+          <p>
+            If your site is stuck in breakdown mode or your engineering setup needs work, get in touch.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-box">
+            <h3>Contact Details</h3>
+            <p>Use the contact details below to get in touch. Keeping the location general is the better move for now.</p>
+            <ul class="contact-list">
+              <li>Phone: +353 87 191 3055</li>
+              <li>Location: Trim, Co. Meath, Ireland</li>
+              <li>Email: prime.engineering.solutions@outlook.com</li>
+            </ul>
+          </div>
+
+          <div class="contact-box">
+            <h3>Quick Contact Form</h3>
+            <form>
+              <input type="text" placeholder="Your name" />
+              <input type="email" placeholder="Your email" />
+              <input type="text" placeholder="Company" />
+              <textarea placeholder="What do you need help with?"></textarea>
+              <button type="submit" class="btn btn-primary">Send Enquiry</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <p>© 2026 Prime Engineering Solutions</p>
+      <p>Practical engineering support for manufacturers</p>
+    </div>
+  </footer>
+</body>
+</html>

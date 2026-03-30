@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prime Engineering Solutions | Client Portal</title>
+  <meta name="description" content="Prime Engineering Solutions client portal for project tracking, documents, and progress." />
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <h1>Prime Engineering Solutions</h1>
+        <p>Client Portal Demo</p>
+      </div>
+      <div class="top-actions">
+        <a class="btn" href="index.html">Back to Website</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="client-login" class="page active">
+      <div class="container center-wrap">
+        <div class="card login-card">
+          <div class="eyebrow">Client access</div>
+          <h2>Project Portal Login</h2>
+          <p>Use your saved 8 digit client ID to access your project. PIN is optional for testing.</p>
+
+          <div class="field">
+            <label for="client-login-id">8 digit client ID</label>
+            <input id="client-login-id" type="text" placeholder="Enter client ID" maxlength="8" />
+          </div>
+
+          <div class="field">
+            <label for="client-login-pin">4 digit PIN</label>
+            <input id="client-login-pin" type="password" placeholder="Enter PIN" maxlength="4" />
+          </div>
+
+          <div class="portal-actions">
+            <button class="btn btn-primary" onclick="clientLogin()">Access Project Portal</button>
+            <button class="btn" onclick="showPage('admin-login')">Admin Login</button>
+          </div>
+
+          <div id="client-login-message" class="status-message"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin-login" class="page">
+      <div class="container center-wrap">
+        <div class="card login-card">
+          <div class="eyebrow">Admin access</div>
+          <h2>Portal Admin Login</h2>
+          <p>For testing, just press Enter or click Log In.</p>
+
+          <div class="field">
+            <label for="admin-username">Username</label>
+            <input id="admin-username" type="text" placeholder="Enter username" />
+          </div>
+
+          <div class="field">
+            <label for="admin-password">Password</label>
+            <input id="admin-password" type="password" placeholder="Enter password" />
+          </div>
+
+          <div class="portal-actions">
+            <button class="btn btn-primary" onclick="adminLogin()">Log In</button>
+            <button class="btn" onclick="showPage('client-login')">Back to Client Login</button>
+          </div>
+
+          <div id="admin-login-message" class="status-message"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="client-dashboard" class="page">
+      <div class="container portal-layout">
+        <aside class="sidebar">
+          <div class="user-box">
+            <div class="eyebrow" style="margin-bottom: 6px;">Client view</div>
+            <strong id="client-side-client-name">Client Name</strong>
+            <span id="client-side-project-name">Engagement Name</span>
+          </div>
+
+          <div class="side-nav">
+            <button class="active" onclick="backToClientDashboard()">Dashboard</button>
+            <button onclick="showClientDetail('progress')">Progress</button>
+            <button onclick="showClientDetail('documents')">Documents</button>
+            <button onclick="showClientDetail('activity')">Project Activity</button>
+          </div>
+        </aside>
+
+        <div class="main-stack">
+          <div id="client-dashboard-main" class="dashboard-view">
+            <div class="card">
+              <div class="section-title">
+                <h3>Your Engagement</h3>
+                <span id="client-project-status-pill" class="pill">In Progress</span>
+              </div>
+
+              <p>Client view only shows useful project updates, concerns found, and next steps.</p>
+
+              <div class="metrics" style="margin-top: 18px;">
+                <div class="metric clickable" onclick="showClientDetail('progress')">
+                  <small>Progress</small>
+                  <strong id="client-metric-progress">0%</strong>
+                </div>
+                <div class="metric">
+                  <small>Areas Started</small>
+                  <strong id="client-metric-started">0</strong>
+                </div>
+                <div class="metric">
+                  <small>Concerns Found</small>
+                  <strong id="client-metric-concerns">0</strong>
+                </div>
+                <div class="metric clickable" onclick="showClientDetail('documents')">
+                  <small>Documents</small>
+                  <strong id="client-metric-docs">0</strong>
+                </div>
+                <div class="metric clickable" onclick="showClientDetail('activity')">
+                  <small>Updates</small>
+                  <strong id="client-metric-updates">0</strong>
+                </div>
+              </div>
+
+              <div class="progress-wrap">
+                <div class="progress-head">
+                  <span>Overall progress</span>
+                  <span id="client-progress-text">0/0 items complete</span>
+                </div>
+                <div class="progress"><span id="client-progress-bar" style="width: 0%;"></span></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-title">
+                <div>
+                  <h3>Project Areas</h3>
+                  <span class="muted">Cleaner cards so you do not lose your place</span>
+                </div>
+                <div class="area-controls">
+                  <button id="client-area-toggle-btn" class="btn btn-small" onclick="toggleClientAreaView()">View All Areas</button>
+                </div>
+              </div>
+
+              <div id="client-dashboard-actions" class="project-areas-grid"></div>
+            </div>
+
+            <div class="card">
+              <div class="section-title">
+                <h3>Project Activity</h3>
+                <span class="muted">Visible progress notes</span>
+              </div>
+
+              <div id="client-dashboard-activity" class="updates-list"></div>
+            </div>
+          </div>
+
+          <div id="client-detail-progress" class="card detail-view">
+            <div class="section-title">
+              <h3>Progress Detail</h3>
+              <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+            </div>
+            <div id="client-progress-detail-list" class="details-list"></div>
+          </div>
+
+          <div id="client-detail-documents" class="card detail-view">
+            <div class="section-title">
+              <h3>Documents Detail</h3>
+              <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+            </div>
+            <div id="client-documents-detail-list" class="docs-list"></div>
+          </div>
+
+          <div id="client-detail-activity" class="card detail-view">
+            <div class="section-title">
+              <h3>Project Activity Detail</h3>
+              <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+            </div>
+            <div id="client-activity-detail-list" class="updates-list"></div>
+          </div>
+
+          <div id="client-action-summary" class="card detail-view">
+            <div class="section-title">
+              <h3 id="client-action-summary-title">Area Update</h3>
+              <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+            </div>
+
+            <div class="summary-grid">
+              <div class="summary-box">
+                <h4>Summary</h4>
+                <p id="client-action-summary-text"></p>
+              </div>
+
+              <div class="summary-box">
+                <h4>Current Status</h4>
+                <p id="client-action-current-status"></p>
+              </div>
+            </div>
+
+            <div class="guide-grid">
+              <div class="mini-panel">
+                <h4>Concerns identified</h4>
+                <ul id="client-action-concerns-list"></ul>
+              </div>
+
+              <div class="mini-panel">
+                <h4>What to collect</h4>
+                <ul id="client-action-evidence-list"></ul>
+              </div>
+
+              <div class="mini-panel">
+                <h4>Next steps</h4>
+                <ul id="client-action-nextsteps-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin-dashboard" class="page">
+      <div class="container portal-layout">
+        <aside class="sidebar">
+          <div class="user-box">
+            <div class="eyebrow" style="margin-bottom: 6px;">Admin view</div>
+            <strong>Dwayne Nelson</strong>
+            <span>Portal Admin</span>
+          </div>
+
+          <div class="side-nav">
+            <button class="active" onclick="backToAdminDashboard()">Dashboard</button>
+            <button onclick="scrollToCreateClient()">Create Client</button>
+            <button onclick="scrollToClientList()">Clients and Projects</button>
+            <button onclick="clearPortalData()">Clear Demo Data</button>
+          </div>
+        </aside>
+
+        <div class="main-stack">
+          <div id="admin-dashboard-main" class="admin-main">
+            <div id="create-client-card" class="card">
+              <div class="eyebrow">Admin setup</div>
+              <h2>Create client access and manage all engagements</h2>
+              <p>The core checklist is always loaded. Then you can add extra modules if needed.</p>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="new-client-name">Client name</label>
+                  <input id="new-client-name" type="text" placeholder="Enter client name" />
+                </div>
+                <div class="field">
+                  <label for="new-project-scope">Scope points</label>
+                  <textarea id="new-project-scope" rows="10" placeholder="Add one issue or priority per line"></textarea>
+
+                  <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-small ai-only" type="button" onclick="suggestModulesWithAI()">Generate Modules</button>
+                    <button class="btn btn-small" type="button" onclick="clearSuggestedModules()">Clear Suggestions</button>
+                    <button type="button" class="btn btn-small ai-signin-button" onclick="signInToAI()">Admin AI Sign In</button>
+                  </div>
+                  <div class="ai-guest-message" style="margin-top: 8px;">AI tools are only available to the portal admin.</div>
+                </div>
+
+                <div class="field">
+                  <label for="new-client-id">Generated client ID</label>
+                  <div class="field-row">
+                    <input id="new-client-id" type="text" placeholder="Generate client ID" readonly />
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="new-client-pin">Generated PIN</label>
+                  <div class="field-row">
+                    <input id="new-client-pin" type="text" placeholder="Generate PIN" readonly />
+                    <button class="btn btn-small" onclick="generateClientPinField()">Generate</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Suggested service modules</label>
+                <p class="field-help">Core engineering review is always included. Use AI to suggest extra modules from the issues entered.</p>
+                <div id="suggested-modules-list" class="module-grid"></div>
+                <p class="field-help">No suggested modules means core engineering review only.</p>
+              </div>
+
+              <div class="portal-actions">
+  <button class="btn btn-primary" onclick="createClient()">Create Client</button>
+  <button class="btn" onclick="generateClientIdField(); generateClientPinField();">Generate Both</button>
+  <button class="btn" onclick="resetCreateClientForm()">Reset Form</button>
+</div>
+
+              <div id="create-client-message" class="status-message"></div>
+            </div>
+
+            <div class="card">
+              <div class="section-title">
+                <h3>Admin dashboard overview</h3>
+                <button class="btn" onclick="renderAdminDashboard()">Refresh</button>
+              </div>
+
+              <div class="metrics">
+                <div class="metric">
+                  <small>Total Clients</small>
+                  <strong id="admin-total-clients">0</strong>
+                </div>
+                <div class="metric">
+                  <small>Active Engagements</small>
+                  <strong id="admin-active-projects">0</strong>
+                </div>
+                <div class="metric">
+                  <small>Completed Engagements</small>
+                  <strong id="admin-completed-projects">0</strong>
+                </div>
+                <div class="metric">
+                  <small>Average Progress</small>
+                  <strong id="admin-average-progress">0%</strong>
+                </div>
+                <div class="metric">
+                  <small>Need Attention</small>
+                  <strong id="admin-needing-attention">0</strong>
+                </div>
+              </div>
+            </div>
+
+            <div id="clients-list-card" class="card">
+              <div class="section-title">
+                <h3>All clients and engagements</h3>
+                <span class="muted">Saved in this browser only</span>
+              </div>
+
+              <div id="admin-client-list" class="stack"></div>
+            </div>
+          </div>
+
+          <div id="admin-project-detail" class="card detail-view">
+            <div class="section-title">
+              <h3 id="admin-project-title">Admin Project Page</h3>
+              <button class="btn btn-small" onclick="backToAdminDashboard()">Back</button>
+            </div>
+
+            <p>Full admin view for one client engagement, including files, notes, checklist work, concerns, and next steps.</p>
+
+            <div class="metrics" style="margin-top: 18px;">
+              <div class="metric"><small>Progress</small><strong id="admin-detail-progress">0%</strong></div>
+              <div class="metric"><small>Completed Items</small><strong id="admin-detail-completed">0</strong></div>
+              <div class="metric"><small>Open Items</small><strong id="admin-detail-open">0</strong></div>
+              <div class="metric"><small>Documents</small><strong id="admin-detail-documents">0</strong></div>
+              <div class="metric"><small>Concerns</small><strong id="admin-detail-concerns">0</strong></div>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-head"><span>Overall progress</span><span id="admin-detail-progress-text">0/0 items complete</span></div>
+              <div class="progress"><span id="admin-detail-progress-bar" style="width: 0%;"></span></div>
+            </div>
+
+            <div class="portal-actions">
+  <button class="btn btn-primary" onclick="triggerAdminFileUpload()">Upload File</button>
+  <button class="btn" onclick="toggleAddNotePanel()">Add Project Note</button>
+  <button class="btn" onclick="toggleAddActionPanel()">Add Custom Action</button>
+  <button class="btn" onclick="resetSelectedClientPin()">Reset Client PIN</button>
+  <button class="btn" onclick="exportClientReport()">Export Report</button>
+</div>
+
+            <input id="admin-file-input" class="hidden" type="file" multiple />
+
+            <div id="admin-project-message" class="status-message"></div>
+
+            <div id="admin-add-note-panel" class="card hidden" style="margin-top: 18px; padding: 18px;">
+              <div class="field" style="margin-top: 0;">
+                <label for="admin-note-title">Note title</label>
+                <input id="admin-note-title" type="text" placeholder="Enter note title" />
+              </div>
+              <div class="field">
+                <label for="admin-note-body">Project note</label>
+                <textarea id="admin-note-body" placeholder="Enter project update"></textarea>
+              </div>
+              <div class="portal-actions">
+                <button class="btn btn-primary" onclick="saveProjectNote()">Save Note</button>
+                <button class="btn" onclick="toggleAddNotePanel(false)">Cancel</button>
+              </div>
+            </div>
+
+            <div id="admin-add-action-panel" class="card hidden" style="margin-top: 18px; padding: 18px;">
+              <div class="field" style="margin-top: 0;">
+                <label for="admin-new-action-title">Action title</label>
+                <input id="admin-new-action-title" type="text" placeholder="Enter action title" />
+              </div>
+              <div class="field">
+                <label for="admin-new-action-purpose">Purpose</label>
+                <textarea id="admin-new-action-purpose" placeholder="What this action is for"></textarea>
+              </div>
+              <div class="field">
+                <label for="admin-new-action-checks">Checks</label>
+                <textarea id="admin-new-action-checks" placeholder="One per line"></textarea>
+              </div>
+              <div class="field">
+                <label for="admin-new-action-questions">Questions</label>
+                <textarea id="admin-new-action-questions" placeholder="One per line"></textarea>
+              </div>
+              <div class="field">
+                <label for="admin-new-action-evidence">Evidence</label>
+                <textarea id="admin-new-action-evidence" placeholder="One per line"></textarea>
+              </div>
+
+              <div class="portal-actions">
+                <button class="btn btn-primary" onclick="saveCustomAction()">Save Action</button>
+                <button class="btn" onclick="toggleAddActionPanel(false)">Cancel</button>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 18px; padding: 18px;">
+              <div class="section-title">
+                <h3>Project Areas</h3>
+                <span class="muted">Open any project area to review and update it</span>
+              </div>
+              <div id="admin-project-actions-list" class="task-list"></div>
+            </div>
+
+            <div class="card" style="margin-top: 18px; padding: 18px;">
+              <div class="section-title">
+                <h3>Project Files</h3>
+                <span class="muted">Demo mode file names only</span>
+              </div>
+              <div id="admin-project-files-list" class="docs-list"></div>
+            </div>
+
+            <div class="card" style="margin-top: 18px; padding: 18px;">
+              <div class="section-title">
+                <h3>Project Activity</h3>
+                <span class="muted">Visible to client</span>
+              </div>
+              <div id="admin-project-notes-list" class="updates-list"></div>
+            </div>
+          </div>
+
+          <div id="admin-action-detail" class="card detail-view">
+            <div class="section-title">
+              <h3 id="admin-action-title">Action Detail</h3>
+              <button class="btn btn-small" onclick="backToAdminProjectDetail()">Back</button>
+            </div>
+
+            <p id="admin-action-purpose-text"></p>
+
+            <div class="metrics" style="margin-top: 18px;">
+              <div class="metric"><small>Action progress</small><strong id="admin-action-progress">0%</strong></div>
+              <div class="metric"><small>Completed</small><strong id="admin-action-completed-count">0</strong></div>
+              <div class="metric"><small>Open</small><strong id="admin-action-open-count">0</strong></div>
+              <div class="metric"><small>Concerns</small><strong id="admin-action-concerns-count">0</strong></div>
+              <div class="metric"><small>Next Steps</small><strong id="admin-action-nextsteps-count">0</strong></div>
+            </div>
+
+            <div class="card review-points-card" style="margin-top: 18px; padding: 18px;">
+  <div class="section-title">
+    <h4>Review Points</h4>
+    <button class="btn btn-small" onclick="addSectionItem('reviewPoints')">Add</button>
+  </div>
+  <div id="admin-action-checks-box" class="checkbox-list"></div>
+  <div id="admin-checks-progress" class="section-progress"></div>
+</div>
+
+            <div class="detail-card">
+              <div class="detail-head">
+                <h3>AI suggested fixes</h3>
+                <span class="muted">Draft ideas only</span>
+              </div>
+              <ul id="admin-action-suggested-fixes-list" class="plain-list"></ul>
+            </div>
+
+            <div class="guide-grid">
+              <div class="guide-box">
+                <div class="section-title">
+                  <h4>Concerns found</h4>
+                  <button class="btn btn-small" onclick="addListItem('concerns')">Add</button>
+                </div>
+                <ul id="admin-action-concerns-list" class="list-with-actions"></ul>
+              </div>
+
+              <div class="guide-box">
+                <div class="section-title">
+                  <h4>Next steps</h4>
+                  <button class="btn btn-small" onclick="addListItem('nextSteps')">Add</button>
+                </div>
+                <ul id="admin-action-nextsteps-list" class="list-with-actions"></ul>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 18px; padding: 18px;">
+              <div class="section-title">
+                <h4>Evidence</h4>
+                <button class="btn btn-small" onclick="addSectionItem('evidence')">Add</button>
+              </div>
+              <div id="admin-action-evidence-box" class="checkbox-list"></div>
+              <div id="admin-evidence-progress" class="section-progress"></div>
+            </div>
+
+            <div class="card" style="margin-top: 18px; padding: 18px;">
+              <div class="field" style="margin-top: 0;">
+                <label for="admin-action-internal-notes">Internal notes</label>
+                <textarea id="admin-action-internal-notes" placeholder="Add your working notes here"></textarea>
+              </div>
+
+              <div class="portal-actions">
+                <button class="btn btn-primary" onclick="saveActionDetail()">Save Action</button>
+                <button class="btn btn-danger" onclick="deleteAction()">Delete Action</button>
+              </div>
+            </div>
+
+            <div id="admin-action-message" class="status-message"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://js.puter.com/v2/"></script>
+  <script src="portal.utils.js"></script>
+  <script src="portal.data.js"></script>
+  <script src="portal.templates.js"></script>
+  <script src="portal.client.js"></script>
+  <script src="portal.admin.js"></script>
+  <script src="portal.actions.js"></script>
+  <script src="portal.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const adminUsername = document.getElementById('admin-username');
+      const adminPassword = document.getElementById('admin-password');
+      const clientId = document.getElementById('client-login-id');
+      const clientPin = document.getElementById('client-login-pin');
+
+      function submitAdminOnEnter(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          adminLogin();
+        }
+      }
+
+      function submitClientOnEnter(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          clientLogin();
+        }
+      }
+
+      if (adminUsername) adminUsername.addEventListener('keydown', submitAdminOnEnter);
+      if (adminPassword) adminPassword.addEventListener('keydown', submitAdminOnEnter);
+      if (clientId) clientId.addEventListener('keydown', submitClientOnEnter);
+      if (clientPin) clientPin.addEventListener('keydown', submitClientOnEnter);
+    });
+  </script>
+</body>
+</html>
