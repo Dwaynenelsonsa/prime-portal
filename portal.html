@@ -255,11 +255,9 @@
                   <textarea id="new-project-scope" rows="10" placeholder="Add one issue or priority per line"></textarea>
 
                   <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn btn-small ai-only" type="button" onclick="suggestModulesWithAI()">Generate Modules</button>
+                    <button class="btn btn-small" type="button" onclick="suggestModulesWithAI()">Generate Modules</button>
                     <button class="btn btn-small" type="button" onclick="clearSuggestedModules()">Clear Suggestions</button>
-                    <button type="button" class="btn btn-small ai-signin-button" onclick="signInToAI()">Admin AI Sign In</button>
                   </div>
-                  <div class="ai-guest-message" style="margin-top: 8px;">AI tools are only available to the portal admin.</div>
                 </div>
 
                 <div class="field">
@@ -286,10 +284,9 @@
               </div>
 
               <div class="portal-actions">
-  <button class="btn btn-primary" onclick="createClient()">Create Client</button>
-  <button class="btn" onclick="generateClientIdField(); generateClientPinField();">Generate Both</button>
-  <button class="btn" onclick="resetCreateClientForm()">Reset Form</button>
-</div>
+                <button class="btn btn-primary" onclick="createClient()">Create Client</button>
+                <button class="btn" onclick="resetCreateClientForm()">Reset Form</button>
+              </div>
 
               <div id="create-client-message" class="status-message"></div>
             </div>
@@ -413,8 +410,7 @@
             <div class="card" style="margin-top: 18px; padding: 18px;">
               <div class="section-title">
                 <h3>Project Areas</h3>
-                <span class="muted">Open any project area to review and update it</span>
-              </div>
+                </div>
               <div id="admin-project-actions-list" class="task-list"></div>
             </div>
 
@@ -436,85 +432,65 @@
           </div>
 
           <div id="admin-action-detail" class="card detail-view">
-            <div class="section-title">
-              <h3 id="admin-action-title">Action Detail</h3>
-              <button class="btn btn-small" onclick="backToAdminProjectDetail()">Back</button>
-            </div>
-
-            <p id="admin-action-purpose-text"></p>
-
-            <div class="metrics" style="margin-top: 18px;">
-              <div class="metric"><small>Action progress</small><strong id="admin-action-progress">0%</strong></div>
-              <div class="metric"><small>Completed</small><strong id="admin-action-completed-count">0</strong></div>
-              <div class="metric"><small>Open</small><strong id="admin-action-open-count">0</strong></div>
-              <div class="metric"><small>Concerns</small><strong id="admin-action-concerns-count">0</strong></div>
-              <div class="metric"><small>Next Steps</small><strong id="admin-action-nextsteps-count">0</strong></div>
-            </div>
-
-            <div class="card review-points-card" style="margin-top: 18px; padding: 18px;">
   <div class="section-title">
-    <h4>Review Points</h4>
-    <button class="btn btn-small" onclick="addSectionItem('reviewPoints')">Add</button>
+    <h3 id="admin-action-title">Action Detail</h3>
+    <button class="btn btn-small" onclick="backToAdminProjectDetail()">Back</button>
   </div>
-  <div id="admin-action-checks-box" class="checkbox-list"></div>
-  <div id="admin-checks-progress" class="section-progress"></div>
+
+  <p id="admin-action-purpose-text"></p>
+
+  <div class="metrics" style="margin-top: 18px;">
+    <div class="metric"><small>Action progress</small><strong id="admin-action-progress">0%</strong></div>
+    <div class="metric"><small>Completed</small><strong id="admin-action-completed-count">0</strong></div>
+    <div class="metric"><small>Open</small><strong id="admin-action-open-count">0</strong></div>
+    <div class="metric"><small>Concerns</small><strong id="admin-action-concerns-count">0</strong></div>
+    <div class="metric"><small>Next Steps</small><strong id="admin-action-nextsteps-count">0</strong></div>
+  </div>
+
+  <div class="card review-points-card" style="margin-top: 18px; padding: 18px;">
+    <div class="section-title">
+      <h4>Review Points</h4>
+      <button class="btn btn-small" onclick="addSectionItem('reviewPoints')">Add</button>
+    </div>
+    <div id="admin-action-checks-box" class="checkbox-list"></div>
+    <div id="admin-checks-progress" class="section-progress"></div>
+  </div>
+
+  <div class="detail-card" style="margin-top: 18px;">
+    <div class="detail-head">
+      <h3>Issues and actions</h3>
+      <span class="muted">Each concern matched to the action needed</span>
+    </div>
+    <ul id="admin-action-issues-nextsteps-list" class="plain-list"></ul>
+  </div>
+
+  <div class="card" style="margin-top: 18px; padding: 18px;">
+    <div class="section-title">
+      <h4>Client documents received</h4>
+      <span class="muted">Mark what has been received from the client</span>
+    </div>
+    <div id="admin-action-evidence-box" class="document-status-list"></div>
+  </div>
+
+  <div class="card" style="margin-top: 18px; padding: 18px;">
+    <div class="field" style="margin-top: 0;">
+      <label for="admin-action-internal-notes">Internal notes</label>
+      <textarea id="admin-action-internal-notes" placeholder="Add your working notes here"></textarea>
+    </div>
+
+    <div class="portal-actions">
+      <button class="btn btn-primary" onclick="saveActionDetail()">Save Action</button>
+      <button class="btn btn-danger" onclick="deleteAction()">Delete Action</button>
+    </div>
+  </div>
+
+  <div id="admin-action-message" class="status-message"></div>
 </div>
-
-            <div class="detail-card">
-              <div class="detail-head">
-                <h3>AI suggested fixes</h3>
-                <span class="muted">Draft ideas only</span>
-              </div>
-              <ul id="admin-action-suggested-fixes-list" class="plain-list"></ul>
-            </div>
-
-            <div class="guide-grid">
-              <div class="guide-box">
-                <div class="section-title">
-                  <h4>Concerns found</h4>
-                  <button class="btn btn-small" onclick="addListItem('concerns')">Add</button>
-                </div>
-                <ul id="admin-action-concerns-list" class="list-with-actions"></ul>
-              </div>
-
-              <div class="guide-box">
-                <div class="section-title">
-                  <h4>Next steps</h4>
-                  <button class="btn btn-small" onclick="addListItem('nextSteps')">Add</button>
-                </div>
-                <ul id="admin-action-nextsteps-list" class="list-with-actions"></ul>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top: 18px; padding: 18px;">
-              <div class="section-title">
-                <h4>Evidence</h4>
-                <button class="btn btn-small" onclick="addSectionItem('evidence')">Add</button>
-              </div>
-              <div id="admin-action-evidence-box" class="checkbox-list"></div>
-              <div id="admin-evidence-progress" class="section-progress"></div>
-            </div>
-
-            <div class="card" style="margin-top: 18px; padding: 18px;">
-              <div class="field" style="margin-top: 0;">
-                <label for="admin-action-internal-notes">Internal notes</label>
-                <textarea id="admin-action-internal-notes" placeholder="Add your working notes here"></textarea>
-              </div>
-
-              <div class="portal-actions">
-                <button class="btn btn-primary" onclick="saveActionDetail()">Save Action</button>
-                <button class="btn btn-danger" onclick="deleteAction()">Delete Action</button>
-              </div>
-            </div>
-
-            <div id="admin-action-message" class="status-message"></div>
-          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <script src="https://js.puter.com/v2/"></script>
   <script src="portal.utils.js"></script>
   <script src="portal.data.js"></script>
   <script src="portal.templates.js"></script>

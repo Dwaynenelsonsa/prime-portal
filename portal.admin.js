@@ -90,8 +90,8 @@ function logoutAdmin() {
   showPage('admin-login');
 }
 
-function suggestModulesFromProjectTitle() {
-  const titleInput = document.getElementById('new-project-name');
+function suggestModulesFromScope() {
+  const titleInput = document.getElementById('new-project-scope');
   if (!titleInput) return;
 
   const title = titleInput.value.trim().toLowerCase();
@@ -102,7 +102,7 @@ function suggestModulesFromProjectTitle() {
   });
 
   if (!title) {
-    showMessage('create-client-message', 'Enter a project title first.', 'bad');
+    showMessage('create-client-message', 'Enter at least one scope point first.', 'bad');
     return;
   }
 
@@ -148,9 +148,9 @@ function suggestModulesFromProjectTitle() {
   });
 
   if (matched.length) {
-    showMessage('create-client-message', 'Suggested modules selected based on project title.', 'good');
+    showMessage('create-client-message', 'Suggested modules selected based on scope points.', 'good');
   } else {
-    showMessage('create-client-message', 'No direct match found. Select modules manually.', 'bad');
+    showMessage('create-client-message', 'No clear scope match found. Select modules manually.', 'bad');
   }
 }
 
@@ -477,152 +477,6 @@ function scrollToCreateClient() {
 
 function scrollToClientList() {
   document.getElementById('clients-list-card').scrollIntoView({ behavior: 'smooth' });
-}
-
-async function suggestModulesWithAI() {
-  clearMessage('create-client-message');
-
-  const scopeInput = document.getElementById('new-project-scope');
-  const listWrap = document.getElementById('suggested-modules-list');
-
-  if (!scopeInput || !listWrap) return;
-
-  const scopePoints = scopeInput.value.trim();
-
-  if (!scopePoints) {
-    showMessage('create-client-message', 'Enter at least one scope point first.', 'bad');
-    return;
-  }
-
-  listWrap.innerHTML = '<div class="module-option">Loading AI suggestions...</div>';
-
-  try {
-    const prompt = `
-You are helping build a simple engineering support project.
-
-Read the client issues and suggest only the most relevant workstreams and modules.
-
-Client issues:
-${scopePoints}
-
-Rules:
-- Return an array of workstream groups
-- Use max 3 workstreams
-- Name them exactly: "Workstream 1", "Workstream 2", "Workstream 3"
-- Use plain everyday English
-- Write so anyone can understand it
-- Do not use jargon, consultant words, or management language
-- Do not guess problems that are not clearly written
-- If there is only one issue, stay focused on that one issue
-- If there are multiple issues, only cover those issues
-- Prefer fewer modules over too many
-- Keep workstream labels short and easy to understand
-- Keep module names short, clear, and practical
-- Do not use words like baseline, governance, triage, cadence, framework, ownership mapping, or capacity model
-- Each module must describe a real task somebody can go and do
-- Avoid vague words like structure, basics, setup, optimise, improve, template, framework
-- Use simple site language
-- Prefer modules like "List equipment", "Set PM timing", "Create job types", "Train first users"
-- Every module should sound like a practical action
-- If a module is too vague, rewrite it into a clear task
-- Every title must make sense to a normal person
-- When in doubt, reduce scope instead of expanding it
-
-Required format:
-[
-  {
-    "workstream": "Workstream 1",
-    "label": "Simple short label",
-    "modules": ["Short clear module name", "Short clear module name"]
-  }
-]
-
-Bad module examples:
-["Set up structure", "Configure basics", "Improve process", "Create template"]
-
-Better module examples:
-["List equipment", "Set PM timing", "Create job types", "Train first users"]
-
-Return JSON only.
-`;
-
-    const response = await puter.ai.chat(prompt, {
-      model: "gpt-5.4-nano"
-    });
-
-    let raw = typeof response === 'string' ? response : String(response || '').trim();
-    let groups = [];
-
-    try {
-      groups = JSON.parse(raw);
-    } catch (e) {
-      const match = raw.match(/\[[\s\S]*\]/);
-      if (match) {
-        try {
-          groups = JSON.parse(match[0]);
-        } catch (err) {
-          groups = [];
-        }
-      }
-    }
-
-    if (!Array.isArray(groups) || !groups.length) {
-      groups = [
-        {
-          workstream: 'Workstream 1',
-          label: 'General engineering review',
-          modules: ['General Engineering Review']
-        }
-      ];
-    }
-
-    groups = groups
-      .filter(function(group) {
-        return group && Array.isArray(group.modules) && group.modules.length;
-      })
-      .slice(0, 3)
-      .map(function(group, index) {
-        return {
-          workstream: 'Workstream ' + (index + 1),
-          label: String(group.label || 'Project delivery focus').trim(),
-          modules: group.modules
-            .map(function(item) {
-              return String(item).trim();
-            })
-            .filter(function(item) {
-              return item.length > 0;
-            })
-            .slice(0, 5)
-        };
-      });
-
-    listWrap.innerHTML = groups.map(function(group) {
-      const modulesHtml = group.modules.map(function(moduleName) {
-        return `
-          <label class="module-option">
-            <input type="checkbox" value="${escapeHtml(moduleName)}" class="module-checkbox" checked />
-            ${escapeHtml(moduleName)}
-          </label>
-        `;
-      }).join('');
-
-      return `
-        <div class="module-group">
-          <div class="module-group-title">${escapeHtml(group.workstream)}</div>
-          <div class="module-group-label">${escapeHtml(group.label)}</div>
-          <div class="module-grid">
-            ${modulesHtml}
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    showMessage('create-client-message', 'AI module suggestions loaded.', 'good');
-  } catch (error) {
-    console.error(error);
-    listWrap.innerHTML = '';
-    showMessage('create-client-message', 'AI suggestion failed. Try again.', 'bad');
-  }
 }
 
 function buildFallbackAIActions(moduleNames) {
@@ -984,6 +838,167 @@ function buildFallbackAIActions(moduleNames) {
     );
   });
 }
+
+async function callLocalAI(prompt) {
+  const response = await fetch('http://127.0.0.1:8000/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ prompt: prompt })
+  });
+
+  if (!response.ok) {
+    throw new Error('Local AI request failed with status ' + response.status);
+  }
+
+  const data = await response.json();
+
+  if (!data || !data.ok) {
+    throw new Error((data && data.error) || 'Local AI returned an invalid response');
+  }
+
+  return String(data.response || '').trim();
+}
+
+async function suggestModulesWithAI() {
+  clearMessage('create-client-message');
+
+  const scopeInput = document.getElementById('new-project-scope');
+  const listWrap = document.getElementById('suggested-modules-list');
+
+  if (!scopeInput || !listWrap) return;
+
+  const scopePoints = scopeInput.value.trim();
+
+  if (!scopePoints) {
+    showMessage('create-client-message', 'Enter at least one scope point first.', 'bad');
+    return;
+  }
+
+  listWrap.innerHTML = '<div class="module-option">Loading AI suggestions...</div>';
+
+  try {
+    const prompt = `
+You are helping build a simple engineering support project.
+
+Read the client issues and suggest only the most relevant workstreams and modules.
+
+Client issues:
+${scopePoints}
+
+Rules:
+- Return an array of workstream groups
+- Use max 3 workstreams
+- Name them exactly: "Workstream 1", "Workstream 2", "Workstream 3"
+- Use plain everyday English
+- Write so anyone can understand it
+- Do not use jargon, consultant words, or management language
+- Do not guess problems that are not clearly written
+- If there is only one issue, stay focused on that one issue
+- If there are multiple issues, only cover those issues
+- Prefer fewer modules over too many
+- Keep workstream labels short and easy to understand
+- Keep module names short, clear, and practical
+- Do not use words like baseline, governance, triage, cadence, framework, ownership mapping, or capacity model
+- Each module must describe a real task somebody can go and do
+- Avoid vague words like structure, basics, setup, optimise, improve, template, framework
+- Use simple site language
+- Prefer modules like "List equipment", "Set PM timing", "Create job types", "Train first users"
+- Every module should sound like a practical action
+- If a module is too vague, rewrite it into a clear task
+- Every title must make sense to a normal person
+- When in doubt, reduce scope instead of expanding it
+
+Required format:
+[
+  {
+    "workstream": "Workstream 1",
+    "label": "Simple short label",
+    "modules": ["Short clear module name", "Short clear module name"]
+  }
+]
+
+Bad module examples:
+["Set up structure", "Configure basics", "Improve process", "Create template"]
+
+Better module examples:
+["List equipment", "Set PM timing", "Create job types", "Train first users"]
+
+Return JSON only.
+`;
+
+    const raw = await callLocalAI(prompt);
+    let groups = [];
+
+    try {
+      groups = JSON.parse(raw);
+    } catch (e) {
+      const match = raw.match(/\[[\s\S]*\]/);
+      if (match) {
+        groups = JSON.parse(match[0]);
+      }
+    }
+
+    if (!Array.isArray(groups) || !groups.length) {
+      groups = [
+        {
+          workstream: 'Workstream 1',
+          label: 'General engineering review',
+          modules: ['General Engineering Review']
+        }
+      ];
+    }
+
+    groups = groups
+      .filter(function(group) {
+        return group && Array.isArray(group.modules) && group.modules.length;
+      })
+      .slice(0, 3)
+      .map(function(group, index) {
+        return {
+          workstream: 'Workstream ' + (index + 1),
+          label: String(group.label || 'Project delivery focus').trim(),
+          modules: group.modules
+            .map(function(item) {
+              return String(item).trim();
+            })
+            .filter(function(item) {
+              return item.length > 0;
+            })
+            .slice(0, 5)
+        };
+      });
+
+    listWrap.innerHTML = groups.map(function(group) {
+      const modulesHtml = group.modules.map(function(moduleName) {
+        return `
+          <label class="module-option">
+            <input type="checkbox" value="${escapeHtml(moduleName)}" class="module-checkbox" checked />
+            ${escapeHtml(moduleName)}
+          </label>
+        `;
+      }).join('');
+
+      return `
+        <div class="module-group">
+          <div class="module-group-title">${escapeHtml(group.workstream)}</div>
+          <div class="module-group-label">${escapeHtml(group.label)}</div>
+          <div class="module-grid">
+            ${modulesHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    showMessage('create-client-message', 'AI module suggestions loaded.', 'good');
+  } catch (error) {
+    console.error(error);
+    listWrap.innerHTML = '';
+    showMessage('create-client-message', 'AI suggestion failed. Try again.', 'bad');
+  }
+}
+
 async function generateAIModuleActions(moduleNames, projectName) {
   if (!moduleNames || !moduleNames.length) {
     return [];
@@ -1016,7 +1031,7 @@ Rules:
 - questions must be 4 to 6 items
 - evidence must be 3 to 5 items
 - redFlags must be 3 to 5 items
-- suggestedFixes must be 4 to 6 items
+- suggestedFixes must be 1 to 3 items
 - Use practical engineering and site language
 - No fluff
 - No generic management speak
@@ -1085,11 +1100,7 @@ Example format:
 `;
 
   try {
-    const response = await puter.ai.chat(prompt, {
-      model: "gpt-5.4-nano"
-    });
-
-    let raw = typeof response === 'string' ? response : String(response || '').trim();
+    const raw = await callLocalAI(prompt);
     let parsed = [];
 
     try {
@@ -1106,35 +1117,40 @@ Example format:
     }
 
     return parsed
-  .filter(function(action) {
-    return action && action.title && action.purpose;
-  })
-  .map(function(action) {
-    return createAction(
-      String(action.title || '').trim(),
-      String(action.purpose || '').trim(),
-      Array.isArray(action.checks) ? action.checks.map(String) : [],
-      Array.isArray(action.questions) ? action.questions.map(String) : [],
-      Array.isArray(action.evidence) ? action.evidence.map(String) : [],
-      Array.isArray(action.redFlags) ? action.redFlags.map(String) : [],
-      Array.isArray(action.suggestedFixes)
-  ? action.suggestedFixes.map(function(fix) {
-      if (typeof fix === 'string') {
-        return fix;
-      }
+      .filter(function(action) {
+        return action && action.title && action.purpose;
+      })
+      .map(function(action) {
+        return createAction(
+          String(action.title || '').trim(),
+          String(action.purpose || '').trim(),
+          Array.isArray(action.checks) ? action.checks.map(String) : [],
+          Array.isArray(action.questions) ? action.questions.map(String) : [],
+          Array.isArray(action.evidence) ? action.evidence.map(String) : [],
+          Array.isArray(action.redFlags) ? action.redFlags.map(String) : [],
+          Array.isArray(action.suggestedFixes)
+            ? action.suggestedFixes.map(function(fix) {
+                if (typeof fix === 'string') {
+                  return {
+                    title: fix.trim(),
+                    summary: fix.trim(),
+                    howTo: [],
+                    clientNeeds: [],
+                    evidence: []
+                  };
+                }
 
-      return {
-        title: String(fix.title || '').trim(),
-        summary: String(fix.summary || '').trim(),
-        howTo: Array.isArray(fix.howTo) ? fix.howTo.map(String) : [],
-        clientNeeds: Array.isArray(fix.clientNeeds) ? fix.clientNeeds.map(String) : [],
-        evidence: Array.isArray(fix.evidence) ? fix.evidence.map(String) : []
-      };
-    })
-  : []
-
-    );
-  });
+                return {
+                  title: String(fix.title || '').trim(),
+                  summary: String(fix.summary || '').trim(),
+                  howTo: Array.isArray(fix.howTo) ? fix.howTo.map(String) : [],
+                  clientNeeds: Array.isArray(fix.clientNeeds) ? fix.clientNeeds.map(String) : [],
+                  evidence: Array.isArray(fix.evidence) ? fix.evidence.map(String) : []
+                };
+              })
+            : []
+        );
+      });
   } catch (error) {
     console.error('AI action generation failed:', error);
     return [];
@@ -1169,6 +1185,8 @@ function exportClientReport() {
     let clientNeedText = 'Further discussion may be needed to confirm the next action.';
     if (Array.isArray(nextSteps[0]?.whatToCollect) && nextSteps[0].whatToCollect.length > 0) {
       clientNeedText = nextSteps[0].whatToCollect.slice(0, 3).join(', ');
+    } else if (Array.isArray(nextSteps[0]?.clientNeeds) && nextSteps[0].clientNeeds.length > 0) {
+      clientNeedText = nextSteps[0].clientNeeds.slice(0, 3).join(', ');
     }
 
     let priorityText = 'Low';
