@@ -237,7 +237,7 @@ function showClientActionSummary(actionId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function clientLogin() {
+async function clientLogin() {
   clearMessage('client-login-message');
 
   const clientId = document.getElementById('client-login-id').value.trim();
@@ -248,25 +248,34 @@ function clientLogin() {
     return;
   }
 
-  const client = getClientById(clientId);
+  try {
+    const result = await pb.collection('clients').getFirstListItem(`client_code="${clientId}"`);
 
-  if (!client) {
+    if (!result) {
+      showMessage('client-login-message', 'Client not found.', 'bad');
+      return;
+    }
+
+    console.log('Entered PIN:', pin);
+      console.log('PocketBase PIN:', result.pin);
+
+      if (pin && pin !== result.pin) {
+        showMessage('client-login-message', 'Wrong PIN.', 'bad');
+        return;
+      }
+
+    currentClientId = clientId;
+    saveSession({ type: 'client', clientId: clientId });
+
+    renderClientDashboard(clientId);
+    showPage('client-dashboard');
+
+    document.getElementById('client-login-id').value = '';
+    document.getElementById('client-login-pin').value = '';
+  } catch (error) {
+    console.error('PocketBase client login failed:', error);
     showMessage('client-login-message', 'Client not found.', 'bad');
-    return;
   }
-
-  if (pin && pin !== client.pin) {
-    showMessage('client-login-message', 'Wrong PIN.', 'bad');
-    return;
-  }
-
-  currentClientId = clientId;
-  saveSession({ type: 'client', clientId: clientId });
-  renderClientDashboard(clientId);
-  showPage('client-dashboard');
-
-  document.getElementById('client-login-id').value = '';
-  document.getElementById('client-login-pin').value = '';
 }
 
 function logoutClient() {
