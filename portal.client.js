@@ -257,12 +257,13 @@ async function clientLogin() {
     }
 
     console.log('Entered PIN:', pin);
-      console.log('PocketBase PIN:', result.pin);
+    console.log('PocketBase PIN:', result.pin);
+    console.log('Full client record:', result);
 
-      if (pin && pin !== result.pin) {
-        showMessage('client-login-message', 'Wrong PIN.', 'bad');
-        return;
-      }
+    if (pin && String(pin) !== String(result.pin)) {
+      showMessage('client-login-message', 'Wrong PIN.', 'bad');
+      return;
+    }
 
     currentClientId = clientId;
     saveSession({ type: 'client', clientId: clientId });
