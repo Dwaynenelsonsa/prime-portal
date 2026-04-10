@@ -4,3 +4,6 @@ node_modules/
 .env
 .env.local
 .DS_Store
+clients.json
+portal_server_log.txt
+portal_server_error_log.txt

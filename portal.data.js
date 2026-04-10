@@ -1,19 +1,72 @@
 const STORAGE_KEY = 'primePortalClients';
 const SESSION_KEY = 'primePortalSession';
+const PRIME_PORTAL_BACKEND_URL = '/api';
+
+let portalClientsCache = [];
+let portalClientsLoaded = false;
+
+async function preloadPortalClients() {
+  try {
+    const response = await fetch(PRIME_PORTAL_BACKEND_URL + '/clients');
+
+    if (!response.ok) {
+      throw new Error('Client preload failed with status ' + response.status);
+    }
+
+    const data = await response.json();
+    const clients = data && Array.isArray(data.clients) ? data.clients : [];
+
+    portalClientsCache = clients;
+    portalClientsLoaded = true;
+    return portalClientsCache;
+  } catch (err) {
+    console.error('Failed to preload clients from backend:', err);
+    portalClientsCache = [];
+    portalClientsLoaded = true;
+    return portalClientsCache;
+  }
+}
+
+async function persistPortalClients() {
+  const response = await fetch(PRIME_PORTAL_BACKEND_URL + '/clients', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      clients: portalClientsCache
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error('Client save failed with status ' + response.status);
+  }
+
+  const data = await response.json();
+
+  if (!data || !data.ok) {
+    throw new Error((data && data.error) || 'Client save failed');
+  }
+
+  return data;
+}
 
 function saveClients(clients) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(clients));
+  portalClientsCache = Array.isArray(clients) ? clients : [];
+  portalClientsLoaded = true;
+
+  return persistPortalClients().catch(function(err) {
+    console.error('Failed to save clients to backend:', err);
+    throw err;
+  });
 }
 
 function getClients() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (err) {
-    return [];
+  if (!portalClientsLoaded) {
+    console.warn('getClients() called before preloadPortalClients() finished. Returning current cache.');
   }
+
+  return portalClientsCache;
 }
 
 function saveSession(session) {

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prime Engineering Solutions | Client Portal</title>
+  <meta name="description" content="Prime Engineering Solutions client portal for project tracking, documents, RCA progress, report visibility, and live project updates." />
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <h1>Prime Engineering Solutions</h1>
+        <p>Client Portal</p>
+      </div>
+      <div class="top-actions">
+        <a class="btn" href="index.html">Back to Website</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="client-login" class="page active">
+      <div class="container center-wrap">
+        <div class="card login-card">
+          <div class="eyebrow">Client access</div>
+          <h2>Project Portal Login</h2>
+          <p>Use your saved 8 digit client ID to access your project. PIN is optional for testing.</p>
+
+          <div class="field">
+            <label for="client-login-id">8 digit client ID</label>
+            <input id="client-login-id" type="text" placeholder="Enter client ID" maxlength="8" />
+          </div>
+
+          <div class="field">
+            <label for="client-login-pin">4 digit PIN</label>
+            <input id="client-login-pin" type="password" placeholder="Enter PIN" maxlength="4" />
+          </div>
+
+          <div class="portal-actions">
+            <button class="btn btn-primary" onclick="clientLogin()">Client Portal Login</button>
+          </div>
+
+          <div id="client-login-message" class="status-message"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="client-dashboard" class="page">
+  <div class="container client-portal-layout">
+    <aside class="client-side-panel">
+      <div class="user-box">
+        <div class="eyebrow" style="margin-bottom: 6px;">Client view</div>
+        <strong id="client-side-client-name">Client Name</strong>
+        <span id="client-side-project-name">Engagement Name</span>
+      </div>
+
+      <div class="side-nav">
+        <button class="active" id="client-nav-home-btn" onclick="backToClientDashboard()">Home</button>
+        <button id="client-nav-problem-areas-btn" onclick="showClientDetail('progress')">Problem Areas</button>
+        <button id="client-nav-rca-btn" onclick="showClientRcaView()">RCA and Causes</button>
+        <button id="client-nav-documents-btn" onclick="showClientDetail('documents')">Documents</button>
+        <button id="client-nav-report-btn" onclick="showClientReportView()">Live Report</button>
+      </div>
+    </aside>
+
+    <div class="main-stack">
+      <div id="client-dashboard-main" class="dashboard-view">
+        <div class="card command-home-card">
+          <div class="command-home-head">
+            <div>
+              <div class="eyebrow">Live command view</div>
+              <h2 class="command-home-title">Client Project Overview</h2>
+              <p class="command-home-subtitle">One screen view of live project position, current risks, progress, root cause work, and report readiness</p>
+            </div>
+            <div class="command-home-status">
+              <span id="client-project-status-pill" class="pill">In Progress</span>
+            </div>
+          </div>
+
+          <div class="command-kpi-grid">
+            <div class="command-kpi command-kpi-primary clickable" onclick="showClientDetail('progress')">
+              <small>Overall Progress</small>
+              <strong id="client-metric-progress">0%</strong>
+              <span id="client-progress-text">0/0 items complete</span>
+            </div>
+
+            <div class="command-kpi">
+              <small>Problem Areas</small>
+              <strong id="client-metric-total-areas">0</strong>
+              <span>Total tracked areas</span>
+            </div>
+
+            <div class="command-kpi">
+              <small>Saved to Report</small>
+              <strong id="client-metric-saved-report">0</strong>
+              <span>Areas pushed live</span>
+            </div>
+
+            <div class="command-kpi command-kpi-alert">
+              <small>Needs Attention</small>
+              <strong id="client-metric-concerns">0</strong>
+              <span>Areas needing follow through</span>
+            </div>
+
+            <div class="command-kpi">
+              <small>RCA Completed</small>
+              <strong id="client-metric-rca-complete">0</strong>
+              <span>Root cause work done</span>
+            </div>
+
+            <div class="command-kpi">
+              <small>Awaiting Information</small>
+              <strong id="client-metric-awaiting-input">0</strong>
+              <span>More input still needed</span>
+            </div>
+
+            <div class="command-kpi clickable" onclick="showClientDetail('documents')">
+              <small>Documents</small>
+              <strong id="client-metric-docs">0</strong>
+              <span>Visible project files</span>
+            </div>
+
+            <div class="command-kpi clickable" onclick="showClientDetail('activity')">
+              <small>Updates</small>
+              <strong id="client-metric-updates">0</strong>
+              <span>Logged project movement</span>
+            </div>
+          </div>
+
+          <div class="command-progress-wrap">
+            <div class="progress-head">
+              <span>Overall delivery progress</span>
+              <span id="client-progress-text-top">0/0 items complete</span>
+            </div>
+            <div class="progress command-progress-bar">
+              <span id="client-progress-bar" style="width: 0%;"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="command-dashboard-grid">
+          <div class="card command-panel command-panel-wide">
+            <div class="section-title">
+              <div>
+                <h3>Live Attention Board</h3>
+                <span class="muted">What matters most right now</span>
+              </div>
+            </div>
+
+            <div class="command-mini-grid">
+              <div class="mini-panel">
+                <h4>High Priority Areas</h4>
+                <ul id="client-high-priority-list"></ul>
+              </div>
+
+              <div class="mini-panel">
+                <h4>RCA Progress</h4>
+                <ul id="client-rca-progress-list"></ul>
+              </div>
+
+              <div class="mini-panel">
+                <h4>Status Breakdown</h4>
+                <ul id="client-status-breakdown-list"></ul>
+              </div>
+
+              <div class="mini-panel">
+                <h4>Live Delivery Position</h4>
+                <div id="client-delivery-position-list" class="plain-stats"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card command-panel">
+            <div class="section-title">
+              <div>
+                <h3>Execution Snapshot</h3>
+                <span class="muted">Area by area status distribution</span>
+              </div>
+            </div>
+            <div id="client-status-bars" class="status-bars"></div>
+          </div>
+
+          <div class="card command-panel">
+            <div class="section-title">
+              <div>
+                <h3>Workflow Snapshot</h3>
+                <span class="muted">Draft, report, and RCA movement</span>
+              </div>
+            </div>
+            <div id="client-workflow-bars" class="status-bars"></div>
+          </div>
+
+                    <div class="card command-panel command-panel-wide">
+            <div class="section-title">
+              <div>
+                <h3>Problem Area Command View</h3>
+                <span class="muted">Live issue command board with status movement, workflow position, RCA state, and execution signals</span>
+              </div>
+              <div class="area-controls">
+                <button id="client-area-toggle-btn" class="btn btn-small" onclick="toggleClientAreaView()">View All Areas</button>
+              </div>
+            </div>
+
+            <div class="problem-command-grid">
+              <div class="mini-panel">
+                <h4>Area Status Signal</h4>
+                <div id="client-status-bars" class="status-bars"></div>
+              </div>
+
+              <div class="mini-panel">
+                <h4>Workflow Snapshot</h4>
+                <div id="client-workflow-bars" class="status-bars"></div>
+              </div>
+            </div>
+
+            <div id="client-dashboard-actions" class="project-areas-grid command-area-grid"></div>
+          </div>
+
+          <div class="card command-panel">
+            <div class="section-title">
+              <div>
+                <h3>Project Activity Feed</h3>
+                <span class="muted">Latest visible movement across the project</span>
+              </div>
+            </div>
+            <div id="client-dashboard-activity" class="updates-list"></div>
+          </div>
+
+          <div class="card command-panel">
+            <div class="section-title">
+              <div>
+                <h3>Live Report Readiness</h3>
+                <span class="muted">How close the project is to a full client ready report</span>
+              </div>
+            </div>
+            <div id="client-report-readiness-list" class="plain-stats"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="client-detail-progress" class="card detail-view">
+        <div class="section-title">
+          <h3>Problem Areas</h3>
+          <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+        </div>
+        <div id="client-progress-detail-list" class="details-list"></div>
+      </div>
+
+            <div id="client-detail-documents" class="card detail-view">
+        <div class="section-title">
+          <h3>Documents Detail</h3>
+          <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+        </div>
+        <div id="client-documents-detail-list" class="docs-list"></div>
+      </div>
+
+      <div id="client-detail-rca" class="card detail-view">
+        <div class="section-title">
+          <h3>RCA and Causes</h3>
+          <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+        </div>
+        <div id="client-rca-detail-list" class="stack"></div>
+      </div>
+
+        <div id="client-detail-activity" class="card detail-view">
+        <div class="section-title">
+          <h3>Project Activity Detail</h3>
+          <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+        </div>
+        <div id="client-activity-detail-list" class="updates-list"></div>
+      </div>
+
+      <div id="client-detail-report" class="card detail-view">
+        <div class="section-title">
+          <h3>Live Report</h3>
+          <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+        </div>
+        <div id="client-report-detail-content"></div>
+      </div>
+
+      <div id="client-action-summary" class="card detail-view">
+        <div class="section-title">
+          <h3 id="client-action-summary-title">Area Update</h3>
+          <button class="btn btn-small" onclick="backToClientDashboard()">Back</button>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <h4>Summary</h4>
+            <p id="client-action-summary-text"></p>
+          </div>
+
+          <div class="summary-box">
+            <h4>Current Status</h4>
+            <p id="client-action-current-status"></p>
+          </div>
+        </div>
+
+        <div class="guide-grid">
+          <div class="mini-panel">
+            <h4>Concerns identified</h4>
+            <ul id="client-action-concerns-list"></ul>
+          </div>
+
+          <div class="mini-panel">
+            <h4>What to collect</h4>
+            <ul id="client-action-evidence-list"></ul>
+          </div>
+
+          <div class="mini-panel">
+            <h4>Next steps</h4>
+            <ul id="client-action-nextsteps-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+
+  <script src="portal.utils.js"></script>
+  <script src="portal.data.js"></script>
+  <script src="portal.templates.js"></script>
+  <script src="portal.client.js"></script>
+  <script src="portal.intelligence.js"></script>
+  <script src="portal.primeforge.js"></script>
+  <script src="portal.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const clientId = document.getElementById('client-login-id');
+      const clientPin = document.getElementById('client-login-pin');
+
+      function submitClientOnEnter(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          clientLogin();
+        }
+      }
+
+      if (clientId) clientId.addEventListener('keydown', submitClientOnEnter);
+      if (clientPin) clientPin.addEventListener('keydown', submitClientOnEnter);
+    });
+  </script>
+</body>
+</html>

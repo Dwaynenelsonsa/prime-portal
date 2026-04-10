@@ -116,6 +116,18 @@ function getStatusPillClass(status) {
   return 'pill';
 }
 
+function getPriorityLabel(priority) {
+  if (priority === 'P1') return 'P1 Immediate Risk';
+  if (priority === 'P2') return 'P2 Short Term Risk';
+  return 'P3 Planned Work';
+}
+
+function getPriorityPillClass(priority) {
+  if (priority === 'P1') return 'pill pill-bad';
+  if (priority === 'P2') return 'pill pill-warn';
+  return 'pill';
+}
+
 function renderEmptyState(message) {
   return '<div class="empty-state">' + escapeHtml(message) + '</div>';
 }

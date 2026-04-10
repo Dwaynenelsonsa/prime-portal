@@ -76,87 +76,116 @@
     </section>
 
     <section id="client-dashboard" class="page">
-      <div class="container portal-layout">
-        <aside class="sidebar">
-          <div class="user-box">
-            <div class="eyebrow" style="margin-bottom: 6px;">Client view</div>
-            <strong id="client-side-client-name">Client Name</strong>
-            <span id="client-side-project-name">Engagement Name</span>
-          </div>
-
-          <div class="side-nav">
-            <button class="active" onclick="backToClientDashboard()">Dashboard</button>
-            <button onclick="showClientDetail('progress')">Progress</button>
-            <button onclick="showClientDetail('documents')">Documents</button>
-            <button onclick="showClientDetail('activity')">Project Activity</button>
-          </div>
-        </aside>
-
-        <div class="main-stack">
+  <div class="container client-portal-layout">
+    <div class="main-stack">
           <div id="client-dashboard-main" class="dashboard-view">
-            <div class="card">
-              <div class="section-title">
-                <h3>Your Engagement</h3>
-                <span id="client-project-status-pill" class="pill">In Progress</span>
-              </div>
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h3>Live Project Dashboard</h3>
+        <span class="muted">Live view of current project position, issue status, and report progress</span>
+      </div>
+      <span id="client-project-status-pill" class="pill">In Progress</span>
+    </div>
 
-              <p>Client view only shows useful project updates, concerns found, and next steps.</p>
+    <div class="metrics" style="margin-top: 18px;">
+      <div class="metric clickable" onclick="showClientDetail('progress')">
+        <small>Overall Progress</small>
+        <strong id="client-metric-progress">0%</strong>
+      </div>
+      <div class="metric">
+        <small>Problem Areas</small>
+        <strong id="client-metric-total-areas">0</strong>
+      </div>
+      <div class="metric">
+        <small>Saved to Report</small>
+        <strong id="client-metric-saved-report">0</strong>
+      </div>
+      <div class="metric">
+        <small>Needs Attention</small>
+        <strong id="client-metric-concerns">0</strong>
+      </div>
+      <div class="metric">
+        <small>RCA Completed</small>
+        <strong id="client-metric-rca-complete">0</strong>
+      </div>
+      <div class="metric">
+        <small>Awaiting Client Input</small>
+        <strong id="client-metric-awaiting-input">0</strong>
+      </div>
+      <div class="metric clickable" onclick="showClientDetail('documents')">
+        <small>Documents</small>
+        <strong id="client-metric-docs">0</strong>
+      </div>
+      <div class="metric clickable" onclick="showClientDetail('activity')">
+        <small>Updates</small>
+        <strong id="client-metric-updates">0</strong>
+      </div>
+    </div>
 
-              <div class="metrics" style="margin-top: 18px;">
-                <div class="metric clickable" onclick="showClientDetail('progress')">
-                  <small>Progress</small>
-                  <strong id="client-metric-progress">0%</strong>
-                </div>
-                <div class="metric">
-                  <small>Areas Started</small>
-                  <strong id="client-metric-started">0</strong>
-                </div>
-                <div class="metric">
-                  <small>Concerns Found</small>
-                  <strong id="client-metric-concerns">0</strong>
-                </div>
-                <div class="metric clickable" onclick="showClientDetail('documents')">
-                  <small>Documents</small>
-                  <strong id="client-metric-docs">0</strong>
-                </div>
-                <div class="metric clickable" onclick="showClientDetail('activity')">
-                  <small>Updates</small>
-                  <strong id="client-metric-updates">0</strong>
-                </div>
-              </div>
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <span>Overall progress</span>
+        <span id="client-progress-text">0/0 items complete</span>
+      </div>
+      <div class="progress"><span id="client-progress-bar" style="width: 0%;"></span></div>
+    </div>
+  </div>
 
-              <div class="progress-wrap">
-                <div class="progress-head">
-                  <span>Overall progress</span>
-                  <span id="client-progress-text">0/0 items complete</span>
-                </div>
-                <div class="progress"><span id="client-progress-bar" style="width: 0%;"></span></div>
-              </div>
-            </div>
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h3>Live Attention View</h3>
+        <span class="muted">What matters most right now</span>
+      </div>
+    </div>
 
-            <div class="card">
-              <div class="section-title">
-                <div>
-                  <h3>Project Areas</h3>
-                  <span class="muted">Cleaner cards so you do not lose your place</span>
-                </div>
-                <div class="area-controls">
-                  <button id="client-area-toggle-btn" class="btn btn-small" onclick="toggleClientAreaView()">View All Areas</button>
-                </div>
-              </div>
+    <div class="guide-grid">
+      <div class="mini-panel">
+        <h4>High Priority Areas</h4>
+        <ul id="client-high-priority-list"></ul>
+      </div>
 
-              <div id="client-dashboard-actions" class="project-areas-grid"></div>
-            </div>
+      <div class="mini-panel">
+        <h4>Awaiting Client Input</h4>
+        <ul id="client-awaiting-input-list"></ul>
+      </div>
 
-            <div class="card">
-              <div class="section-title">
-                <h3>Project Activity</h3>
-                <span class="muted">Visible progress notes</span>
-              </div>
+      <div class="mini-panel">
+        <h4>RCA Progress</h4>
+        <ul id="client-rca-progress-list"></ul>
+      </div>
 
-              <div id="client-dashboard-activity" class="updates-list"></div>
-            </div>
-          </div>
+      <div class="mini-panel">
+        <h4>Status Breakdown</h4>
+        <ul id="client-status-breakdown-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h3>Problem Areas</h3>
+        <span class="muted">Live issue cards with status, report state, RCA state, and latest direction</span>
+      </div>
+      <div class="area-controls">
+        <button id="client-area-toggle-btn" class="btn btn-small" onclick="toggleClientAreaView()">View All Areas</button>
+      </div>
+    </div>
+
+    <div id="client-dashboard-actions" class="project-areas-grid"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">
+      <h3>Project Activity</h3>
+      <span class="muted">Latest visible movement across the project</span>
+    </div>
+
+    <div id="client-dashboard-activity" class="updates-list"></div>
+  </div>
+</div>
 
           <div id="client-detail-progress" class="card detail-view">
             <div class="section-title">
@@ -218,6 +247,23 @@
             </div>
           </div>
         </div>
+
+        <aside class="client-side-panel">
+          <div class="user-box">
+            <div class="eyebrow" style="margin-bottom: 6px;">Client view</div>
+            <strong id="client-side-client-name">Client Name</strong>
+            <span id="client-side-project-name">Engagement Name</span>
+          </div>
+
+          <div class="side-nav">
+            <button class="active" id="client-nav-home-btn" onclick="backToClientDashboard()">Home</button>
+            <button id="client-nav-problem-areas-btn" onclick="showClientDetail('progress')">Problem Areas</button>
+            <button id="client-nav-rca-btn" onclick="showClientRcaView()">RCA and Causes</button>
+            <button id="client-nav-inputs-btn" onclick="showClientInputsView()">Client Inputs</button>
+            <button id="client-nav-documents-btn" onclick="showClientDetail('documents')">Documents</button>
+            <button id="client-nav-report-btn" onclick="showClientReportView()">Live Report</button>
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -225,16 +271,24 @@
       <div class="container portal-layout">
         <aside class="sidebar">
           <div class="user-box">
-            <div class="eyebrow" style="margin-bottom: 6px;">Admin view</div>
+            <div class="eyebrow" style="margin-bottom: 6px;">Admin workspace</div>
             <strong>Dwayne Nelson</strong>
-            <span>Portal Admin</span>
+            <span>Prime Solutions Platform</span>
           </div>
 
           <div class="side-nav">
-            <button class="active" onclick="backToAdminDashboard()">Dashboard</button>
-            <button onclick="scrollToCreateClient()">Create Client</button>
-            <button onclick="scrollToClientList()">Clients and Projects</button>
-            <button onclick="clearPortalData()">Clear Demo Data</button>
+            <button class="active" id="admin-nav-home-btn" type="button" onclick="backToAdminDashboard()">Home</button>
+            <button id="admin-nav-clients-btn" type="button" onclick="scrollToClientList()">Clients</button>
+            <button id="admin-nav-overview-btn" type="button" onclick="switchAdminReportTab('overview')">Overview</button>
+            <button id="admin-nav-v1-btn" type="button" onclick="switchAdminReportTab('v1')">Phase 1</button>
+            <button id="admin-nav-v2-btn" type="button" onclick="switchAdminReportTab('v2')">Phase 2</button>
+            <button id="admin-nav-v3-btn" type="button" onclick="switchAdminReportTab('v3')">Phase 3</button>
+            <button id="admin-nav-final-btn" type="button" onclick="switchAdminReportTab('final')">Phase 4</button>
+            <button id="admin-nav-files-btn" type="button" onclick="switchAdminReportTab('files')">Files</button>
+            <button id="admin-nav-client-btn" type="button" onclick="switchAdminReportTab('client')">Client Responses</button>
+            <button type="button" onclick="viewLiveReport()">View Live Report</button>
+            <button type="button" onclick="exportClientReportFile()">Export Full Report</button>
+            <button type="button" class="side-nav-danger" onclick="clearPortalData()">Clear All Data</button>
           </div>
         </aside>
 
@@ -280,6 +334,12 @@
                 <label>Suggested service modules</label>
                 <p class="field-help">Core engineering review is always included. Use AI to suggest extra modules from the issues entered.</p>
                 <div id="suggested-modules-list" class="module-grid"></div>
+                <div id="prime-forge-review" class="card" style="margin-top: 14px; padding: 16px; display: none;">
+                  <div class="eyebrow">Prime Forge Review</div>
+                  <h3 style="margin: 0 0 8px;">Scope check and module review</h3>
+                  <p class="field-help" style="margin-bottom: 12px;">Prime Forge checks the suggested workstreams, removes obvious mismatch, and explains why.</p>
+                  <div id="prime-forge-review-content"></div>
+                </div>
                 <p class="field-help">No suggested modules means core engineering review only.</p>
               </div>
 
@@ -293,7 +353,10 @@
 
             <div class="card">
               <div class="section-title">
-                <h3>Admin dashboard overview</h3>
+                <div>
+                  <h3>Home</h3>
+                  <span class="muted">Create a client and manage current clients from here</span>
+                </div>
                 <button class="btn" onclick="renderAdminDashboard()">Refresh</button>
               </div>
 
@@ -303,27 +366,19 @@
                   <strong id="admin-total-clients">0</strong>
                 </div>
                 <div class="metric">
-                  <small>Active Engagements</small>
+                  <small>Active Clients</small>
                   <strong id="admin-active-projects">0</strong>
                 </div>
                 <div class="metric">
-                  <small>Completed Engagements</small>
+                  <small>Completed Clients</small>
                   <strong id="admin-completed-projects">0</strong>
-                </div>
-                <div class="metric">
-                  <small>Average Progress</small>
-                  <strong id="admin-average-progress">0%</strong>
-                </div>
-                <div class="metric">
-                  <small>Need Attention</small>
-                  <strong id="admin-needing-attention">0</strong>
                 </div>
               </div>
             </div>
 
             <div id="clients-list-card" class="card">
               <div class="section-title">
-                <h3>All clients and engagements</h3>
+                <h3>Clients</h3>
                 <span class="muted">Saved in this browser only</span>
               </div>
 
@@ -332,174 +387,507 @@
           </div>
 
           <div id="admin-project-detail" class="card detail-view">
-            <div class="section-title">
-              <h3 id="admin-project-title">Admin Project Page</h3>
-              <button class="btn btn-small" onclick="backToAdminDashboard()">Back</button>
+            <div class="section-title admin-workspace-head">
+              <div>
+                <div class="eyebrow">Client workspace</div>
+                <h3>Overview</h3>
+                <p style="margin: 6px 0 0; color: #64748b;">
+                  Client: <span id="admin-project-title"></span>
+                </p>
+              </div>
+              <button class="btn btn-small" type="button" onclick="backToAdminDashboard()">Back to Home</button>
             </div>
 
-            <p>Full admin view for one client engagement, including files, notes, checklist work, concerns, and next steps.</p>
-
-            <div class="metrics" style="margin-top: 18px;">
-              <div class="metric"><small>Progress</small><strong id="admin-detail-progress">0%</strong></div>
-              <div class="metric"><small>Completed Items</small><strong id="admin-detail-completed">0</strong></div>
-              <div class="metric"><small>Open Items</small><strong id="admin-detail-open">0</strong></div>
-              <div class="metric"><small>Documents</small><strong id="admin-detail-documents">0</strong></div>
-              <div class="metric"><small>Concerns</small><strong id="admin-detail-concerns">0</strong></div>
+            <div class="metrics admin-overview-metrics" style="margin-top: 18px;">
+              <div class="metric"><small id="admin-detail-progress-label">Overall Progress</small><strong id="admin-detail-progress">0%</strong></div>
+<div class="metric"><small id="admin-detail-completed-label">Completed Items</small><strong id="admin-detail-completed">0</strong></div>
+<div class="metric"><small id="admin-detail-open-label">Open Items</small><strong id="admin-detail-open">0</strong></div>
+<div class="metric"><small id="admin-detail-status-label">Current Status</small><strong id="admin-detail-documents">Overview</strong></div>
+<div class="metric"><small id="admin-detail-concerns-label">Concerns</small><strong id="admin-detail-concerns">0</strong></div>
             </div>
 
             <div class="progress-wrap">
-              <div class="progress-head"><span>Overall progress</span><span id="admin-detail-progress-text">0/0 items complete</span></div>
+              <div class="progress-head"><span id="admin-detail-progress-head-label">Engagement progress</span><span id="admin-detail-progress-text">0/0 items complete</span></div>
               <div class="progress"><span id="admin-detail-progress-bar" style="width: 0%;"></span></div>
             </div>
 
-            <div class="portal-actions">
-  <button class="btn btn-primary" onclick="triggerAdminFileUpload()">Upload File</button>
-  <button class="btn" onclick="toggleAddNotePanel()">Add Project Note</button>
-  <button class="btn" onclick="toggleAddActionPanel()">Add Custom Action</button>
-  <button class="btn" onclick="resetSelectedClientPin()">Reset Client PIN</button>
-  <button class="btn" onclick="exportClientReport()">Export Report</button>
+            <div id="admin-primeforge-assistant-card" class="card" style="margin-top: 14px; padding: 18px;">
+              <div class="section-title">
+                <div>
+                  <div class="eyebrow">Prime Forge Assistant</div>
+                  <h4 style="margin: 0;">Live workspace assistant</h4>
+                  <p class="muted" style="margin-top: 6px;">Project aware guidance, live focus, and next move support while you work.</p>
+                </div>
+              </div>
+
+              <div class="project-area-command-metrics" style="margin-top: 14px;">
+                <div class="project-area-command-metric">
+                  <small>Current Phase</small>
+                  <strong id="admin-primeforge-phase">Overview</strong>
+                  <span>Prime Forge current workspace position</span>
+                </div>
+
+                <div class="project-area-command-metric">
+                  <small>Current Focus</small>
+                  <strong id="admin-primeforge-focus">No active area</strong>
+                  <span>Problem area currently in focus</span>
+                </div>
+
+                <div class="project-area-command-metric">
+                  <small>Deferred Areas</small>
+                  <strong id="admin-primeforge-deferred-count">0</strong>
+                  <span>Suggested modules saved for later</span>
+                </div>
+
+                <div class="project-area-command-metric">
+                  <small>Assistant Status</small>
+                  <strong id="admin-primeforge-status">Watching</strong>
+                  <span>Reviewing project context and next step options</span>
+                </div>
+              </div>
+
+                            <div class="card" style="margin-top: 16px; padding: 16px;">
+                <div class="section-title">
+                  <div>
+                    <h4 style="margin: 0;">Prime Forge assistant</h4>
+                    <span class="muted">Portal aware assistant for commands, answers, next steps, and live workspace help</span>
+                  </div>
+                </div>
+
+                <div id="admin-primeforge-chat-feed" style="margin-top: 12px; display: grid; gap: 10px; max-height: 360px; overflow-y: auto; padding-right: 4px;"></div>
+
+                <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end;">
+                  <textarea
+                    id="admin-primeforge-input"
+                    rows="3"
+                    placeholder="Ask Prime Forge anything about this portal, this client, this phase, or tell it what to do"
+                    style="min-height: 84px; resize: vertical;"
+                    onkeydown="handlePrimeForgeInputKey(event)"
+                  ></textarea>
+                  <button class="btn btn-primary" type="button" onclick="submitPrimeForgeCommand()">Send</button>
+                </div>
+
+                <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;">
+                  <button class="btn btn-small" type="button" onclick="primeForgeQuickCommand('what should i do next')">What next</button>
+                  <button class="btn btn-small" type="button" onclick="primeForgeQuickCommand('generate draft pack')">Generate draft pack</button>
+                  <button class="btn btn-small" type="button" onclick="primeForgeQuickCommand('view live report')">View live report</button>
+                  <button class="btn btn-small" type="button" onclick="primeForgeQuickCommand('show deferred areas')">Show deferred areas</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-report-sections">
+
+  <div class="admin-report-section active" id="admin-section-overview">
+    <div class="card" style="margin-top: 14px;">
+      <div class="section-title">
+        <div>
+          <h4>Overview</h4>
+          <p class="muted">First glance view of immediate risk, active issues, and current client position.</p>
+        </div>
+      </div>
+
+      <div class="project-area-command-metrics" style="margin-top: 18px;">
+        <div class="project-area-command-metric">
+          <small>Immediate Safety Risk</small>
+          <strong id="admin-overview-safety-risk">0</strong>
+          <span>Audit, legal, permit, unsafe work, or injury exposure</span>
+        </div>
+
+        <div class="project-area-command-metric">
+          <small>Production Risk</small>
+          <strong id="admin-overview-production-risk">0</strong>
+          <span>Downtime, line stop, repeat failure, or asset loss</span>
+        </div>
+
+        <div class="project-area-command-metric">
+          <small>Top Active Issues</small>
+          <strong id="admin-overview-top-issues">0</strong>
+          <span>Main live problem areas still needing action</span>
+        </div>
+
+        <div class="project-area-command-metric">
+          <small>Current Phase</small>
+          <strong id="admin-overview-phase-position">Overview</strong>
+          <span>Current delivery position for this client</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 18px; padding: 18px;">
+        <div class="section-title">
+          <div>
+            <h4>Immediate Attention</h4>
+            <span class="muted">Top urgent risks and active problem areas at a glance</span>
+          </div>
+        </div>
+
+        <div class="overview-rows-head">
+          <span>Problem Area</span>
+          <span>Type</span>
+          <span>Status</span>
+        </div>
+
+        <div id="admin-overview-immediate-list" class="overview-rows-list"></div>
+      </div>
+
+      <div class="card" style="margin-top: 18px; padding: 18px;">
+        <div class="section-title">
+          <div>
+            <h4>Top Problem Areas</h4>
+            <span class="muted">Main active issues across this engagement</span>
+          </div>
+        </div>
+
+        <div class="overview-rows-head">
+          <span>Problem Area</span>
+          <span>Workflow</span>
+          <span>Status</span>
+        </div>
+
+        <div id="admin-overview-top-problems-list" class="overview-rows-list"></div>
+      </div>
+
+      <div class="portal-actions" style="margin-top: 18px;">
+        <button class="btn btn-primary" type="button" onclick="switchAdminReportTab('v1')">Open Phase 1</button>
+        <button class="btn" type="button" onclick="switchAdminReportTab('v2')">Open Phase 2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-v1">
+    <div class="card" style="margin-top: 14px;">
+      <div class="section-title">
+        <div>
+          <h4>Phase 1</h4>
+          <p class="muted">Initial findings, gaps, problem areas, and first recommendations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="admin-phase1-problem-areas-card" class="card" style="margin-top: 14px; padding: 14px;">
+      <div class="section-title">
+        <h3>Problem Areas</h3>
+      </div>
+      <div id="admin-project-actions-list" class="task-list"></div>
+    </div>
+
+    <div id="admin-phase1-action-detail-wrap"></div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-v2">
+    <div class="card" style="margin-top: 14px;">
+      <div class="section-title">
+        <div>
+          <h4>Phase 2</h4>
+          <p class="muted">Second visit validation, client follow through, and deeper verification.</p>
+        </div>
+      </div>
+
+      <div class="project-area-command-metrics" style="margin-top: 18px;">
+        <div class="project-area-command-metric">
+          <small>Validation Questions</small>
+          <strong id="admin-phase2-total-questions">0</strong>
+          <span>Total second visit questions for the selected issue</span>
+        </div>
+
+        <div class="project-area-command-metric">
+          <small>Answered</small>
+          <strong id="admin-phase2-answered-questions">0</strong>
+          <span>Questions already answered from the second visit</span>
+        </div>
+
+        <div class="project-area-command-metric">
+          <small>Still Open</small>
+          <strong id="admin-phase2-open-questions">0</strong>
+          <span>Questions still waiting for validation</span>
+        </div>
+
+        <div class="project-area-command-metric">
+          <small>Phase 2 Status</small>
+          <strong id="admin-phase2-status-text">Waiting</strong>
+          <span>Current validation position for this issue</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="admin-phase2-second-visit-wrap"></div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-v3">
+    <div class="card" style="margin-top: 14px;">
+      <h4>V3 Report</h4>
+      <p class="muted">Final validation before delivery.</p>
+    </div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-final">
+    <div class="card" style="margin-top: 14px;">
+      <h4>Final Report</h4>
+      <p class="muted">Client ready report output.</p>
+    </div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-files">
+    <div class="card" style="margin-top: 14px;">
+      <h4>Files</h4>
+      <p class="muted">All uploaded and generated files.</p>
+    </div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-client">
+    <div class="card" style="margin-top: 14px;">
+      <h4>Client Responses</h4>
+      <p class="muted">Inputs, clarifications, and responses from client.</p>
+    </div>
+  </div>
+
+  <div class="admin-report-section" id="admin-section-next">
+    <div class="card" style="margin-top: 14px;">
+      <h4>Next Phase</h4>
+      <p class="muted">Future work, implementation, and follow-on projects.</p>
+    </div>
+  </div>
+
 </div>
+
+            <div class="portal-actions hidden">
+              <button class="btn btn-primary" type="button" onclick="openEditProjectPanel()">Edit Client</button>
+              <button class="btn" type="button" onclick="triggerAdminFileUpload()">Upload File</button>
+              <button class="btn" type="button" onclick="resetSelectedClientPin()">Reset Client PIN</button>
+            </div>
 
             <input id="admin-file-input" class="hidden" type="file" multiple />
 
             <div id="admin-project-message" class="status-message"></div>
 
-            <div id="admin-add-note-panel" class="card hidden" style="margin-top: 18px; padding: 18px;">
-              <div class="field" style="margin-top: 0;">
-                <label for="admin-note-title">Note title</label>
-                <input id="admin-note-title" type="text" placeholder="Enter note title" />
-              </div>
-              <div class="field">
-                <label for="admin-note-body">Project note</label>
-                <textarea id="admin-note-body" placeholder="Enter project update"></textarea>
-              </div>
-              <div class="portal-actions">
-                <button class="btn btn-primary" onclick="saveProjectNote()">Save Note</button>
-                <button class="btn" onclick="toggleAddNotePanel(false)">Cancel</button>
-              </div>
-            </div>
-
-            <div id="admin-add-action-panel" class="card hidden" style="margin-top: 18px; padding: 18px;">
-              <div class="field" style="margin-top: 0;">
-                <label for="admin-new-action-title">Action title</label>
-                <input id="admin-new-action-title" type="text" placeholder="Enter action title" />
-              </div>
-              <div class="field">
-                <label for="admin-new-action-purpose">Purpose</label>
-                <textarea id="admin-new-action-purpose" placeholder="What this action is for"></textarea>
-              </div>
-              <div class="field">
-                <label for="admin-new-action-checks">Checks</label>
-                <textarea id="admin-new-action-checks" placeholder="One per line"></textarea>
-              </div>
-              <div class="field">
-                <label for="admin-new-action-questions">Questions</label>
-                <textarea id="admin-new-action-questions" placeholder="One per line"></textarea>
-              </div>
-              <div class="field">
-                <label for="admin-new-action-evidence">Evidence</label>
-                <textarea id="admin-new-action-evidence" placeholder="One per line"></textarea>
-              </div>
-
-              <div class="portal-actions">
-                <button class="btn btn-primary" onclick="saveCustomAction()">Save Action</button>
-                <button class="btn" onclick="toggleAddActionPanel(false)">Cancel</button>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top: 18px; padding: 18px;">
+            <div id="admin-edit-project-panel" class="card hidden" style="margin-top: 14px; padding: 14px;">
               <div class="section-title">
-                <h3>Project Areas</h3>
+                <h3>Edit Project</h3>
+                <button class="btn btn-small" onclick="closeEditProjectPanel()">Close</button>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="admin-edit-project-title">Project title</label>
+                  <input id="admin-edit-project-title" type="text" placeholder="Enter project title" />
                 </div>
-              <div id="admin-project-actions-list" class="task-list"></div>
+
+                <div class="field">
+                  <label for="admin-edit-project-status">Project status</label>
+                  <input id="admin-edit-project-status" type="text" placeholder="Enter project status" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="admin-edit-project-summary">Project summary</label>
+                <textarea id="admin-edit-project-summary" placeholder="Enter project summary"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="admin-edit-project-scope">Scope and concerns</label>
+                <textarea id="admin-edit-project-scope" placeholder="Add one issue or concern per line"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="admin-edit-project-extra-issues">Add more issues</label>
+                <textarea id="admin-edit-project-extra-issues" placeholder="Add extra issues found after the first visit, one per line"></textarea>
+              </div>
+
+              <div class="portal-actions">
+                <button class="btn btn-primary" onclick="saveProjectEdits()">Save Project Changes</button>
+                <button class="btn" onclick="closeEditProjectPanel()">Cancel</button>
+              </div>
             </div>
 
-            <div class="card" style="margin-top: 18px; padding: 18px;">
-              <div class="section-title">
-                <h3>Project Files</h3>
-                <span class="muted">Demo mode file names only</span>
-              </div>
-              <div id="admin-project-files-list" class="docs-list"></div>
+          <div id="admin-problem-areas-card" class="card hidden" style="margin-top: 14px; padding: 14px;">
+            <div class="section-title">
+              <h3>Problem Areas</h3>
             </div>
-
-            <div class="card" style="margin-top: 18px; padding: 18px;">
-              <div class="section-title">
-                <h3>Project Activity</h3>
-                <span class="muted">Visible to client</span>
-              </div>
-              <div id="admin-project-notes-list" class="updates-list"></div>
-            </div>
+            <div id="admin-project-actions-list" class="task-list"></div>
           </div>
 
-          <div id="admin-action-detail" class="card detail-view">
-  <div class="section-title">
-    <h3 id="admin-action-title">Action Detail</h3>
-    <button class="btn btn-small" onclick="backToAdminProjectDetail()">Back</button>
-  </div>
+          <div id="admin-action-detail" class="card detail-view hidden" style="margin-top: 14px;">
+            <div class="card" style="padding: 14px; margin-bottom: 14px; border: 1px solid rgba(14, 165, 233, 0.28); background: rgba(14, 165, 233, 0.05);">
+              <div class="section-title" style="margin-bottom: 8px;">
+                <div>
+                  <h4 style="margin-bottom: 6px;">Selected Problem Area</h4>
+                  <div id="admin-action-title" style="font-size: 22px; font-weight: 700; line-height: 1.3;"></div>
+                  <div id="admin-action-purpose-text" class="muted" style="margin-top: 6px;"></div>
+                </div>
+              </div>
+            </div>
 
-  <p id="admin-action-purpose-text"></p>
+            <div id="admin-action-progress" class="hidden"></div>
+            <div id="admin-action-completed-count" class="hidden"></div>
+            <div id="admin-action-open-count" class="hidden"></div>
+            <div id="admin-action-concerns-count" class="hidden"></div>
+            <div id="admin-action-nextsteps-count" class="hidden"></div>
 
-  <div class="metrics" style="margin-top: 18px;">
-    <div class="metric"><small>Action progress</small><strong id="admin-action-progress">0%</strong></div>
-    <div class="metric"><small>Completed</small><strong id="admin-action-completed-count">0</strong></div>
-    <div class="metric"><small>Open</small><strong id="admin-action-open-count">0</strong></div>
-    <div class="metric"><small>Concerns</small><strong id="admin-action-concerns-count">0</strong></div>
-    <div class="metric"><small>Next Steps</small><strong id="admin-action-nextsteps-count">0</strong></div>
-  </div>
+            <div id="admin-action-checks-box" class="hidden"></div>
+            <div id="admin-checks-progress" class="hidden"></div>
 
-  <div class="card review-points-card" style="margin-top: 18px; padding: 18px;">
-    <div class="section-title">
-      <h4>Review Points</h4>
-      <button class="btn btn-small" onclick="addSectionItem('reviewPoints')">Add</button>
+            <div class="card" style="margin-top: 18px; padding: 14px; position: sticky; top: 12px; z-index: 30; border: 2px solid #0ea5e9; box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);">
+  <div class="section-title" style="margin-bottom: 0; align-items: center;">
+    <div>
+      <h4 style="margin-bottom: 4px;">Problem Area Draft</h4>
+      <span class="muted">Generate draft findings, recommendations, next actions, and second visit questions for this problem area only</span>
     </div>
-    <div id="admin-action-checks-box" class="checkbox-list"></div>
-    <div id="admin-checks-progress" class="section-progress"></div>
+    <button class="btn btn-primary" onclick="generateInvestigationPack()">Generate Draft</button>
   </div>
-
-  <div class="detail-card" style="margin-top: 18px;">
-    <div class="detail-head">
-      <h3>Issues and actions</h3>
-      <span class="muted">Each concern matched to the action needed</span>
-    </div>
-    <ul id="admin-action-issues-nextsteps-list" class="plain-list"></ul>
-  </div>
-
-  <div class="card" style="margin-top: 18px; padding: 18px;">
-    <div class="section-title">
-      <h4>Client documents received</h4>
-      <span class="muted">Mark what has been received from the client</span>
-    </div>
-    <div id="admin-action-evidence-box" class="document-status-list"></div>
-  </div>
-
-  <div class="card" style="margin-top: 18px; padding: 18px;">
-    <div class="field" style="margin-top: 0;">
-      <label for="admin-action-internal-notes">Internal notes</label>
-      <textarea id="admin-action-internal-notes" placeholder="Add your working notes here"></textarea>
-    </div>
-
-    <div class="portal-actions">
-      <button class="btn btn-primary" onclick="saveActionDetail()">Save Action</button>
-      <button class="btn btn-danger" onclick="deleteAction()">Delete Action</button>
-    </div>
-  </div>
-
-  <div id="admin-action-message" class="status-message"></div>
 </div>
+
+            <textarea id="admin-action-known-info" class="hidden"></textarea>
+
+            <textarea id="admin-action-missing-info" class="hidden"></textarea>
+
+            <div class="card" style="margin-top: 14px; padding: 14px;">
+              <div class="section-title">
+                <h4>Findings and Recommendations</h4>
+                <span class="muted">Drafted for this problem area and ready for review</span>
+              </div>
+
+              <div class="field" style="margin-top: 0;">
+                <label for="admin-action-findings">Findings</label>
+                <textarea id="admin-action-findings" rows="4" style="min-height: 96px;" placeholder="What the deeper investigation is showing"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="admin-action-recommendations">Recommendations</label>
+                <textarea id="admin-action-recommendations" rows="4" style="min-height: 96px;" placeholder="What should be done to resolve or improve this issue"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="admin-action-next-implementation">What to put in place next</label>
+                <textarea id="admin-action-next-implementation" rows="4" style="min-height: 96px;" placeholder="What process, controls, ownership, systems, or actions should be put in place next"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="admin-action-implementation-guidance">Implementation guidance</label>
+                <textarea id="admin-action-implementation-guidance" rows="4" style="min-height: 96px;" placeholder="How to implement the recommendation in practice"></textarea>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 14px; padding: 14px;">
+              <div class="section-title">
+                <div>
+                  <h4>Root Cause Analysis</h4>
+                  <span class="muted">Open this only when you want to generate or review the RCA</span>
+                </div>
+                <button id="admin-rca-toggle-btn" class="btn btn-small" type="button" onclick="toggleRcaSection()">Open RCA</button>
+              </div>
+
+              <div id="admin-rca-section" class="hidden" style="margin-top: 14px;">
+                <div class="portal-actions" style="margin-bottom: 14px;">
+                  <button class="btn btn-primary" type="button" onclick="generateRca()">Generate RCA</button>
+                </div>
+
+                <div class="field" style="margin-top: 0;">
+                  <label for="admin-rca-problem-statement">Problem statement</label>
+                  <textarea id="admin-rca-problem-statement" rows="3" style="min-height: 82px;" placeholder="State the issue clearly and specifically"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="admin-rca-immediate-cause">Immediate cause</label>
+                  <textarea id="admin-rca-immediate-cause" rows="3" style="min-height: 82px;" placeholder="What appears to have directly caused the problem"></textarea>
+                </div>
+
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="admin-rca-why1">Why 1</label>
+                    <textarea id="admin-rca-why1" rows="2" style="min-height: 68px;" placeholder="First why"></textarea>
+                  </div>
+                  <div class="field">
+                    <label for="admin-rca-why2">Why 2</label>
+                    <textarea id="admin-rca-why2" rows="2" style="min-height: 68px;" placeholder="Second why"></textarea>
+                  </div>
+                  <div class="field">
+                    <label for="admin-rca-why3">Why 3</label>
+                    <textarea id="admin-rca-why3" rows="2" style="min-height: 68px;" placeholder="Third why"></textarea>
+                  </div>
+                  <div class="field">
+                    <label for="admin-rca-why4">Why 4</label>
+                    <textarea id="admin-rca-why4" rows="2" style="min-height: 68px;" placeholder="Fourth why"></textarea>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="admin-rca-why5">Why 5</label>
+                  <textarea id="admin-rca-why5" rows="2" style="min-height: 68px;" placeholder="Fifth why"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="admin-rca-root-cause">Likely root cause</label>
+                  <textarea id="admin-rca-root-cause" rows="3" style="min-height: 82px;" placeholder="What sits underneath the repeated whys"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="admin-rca-contributing-factors">Contributing factors</label>
+                  <textarea id="admin-rca-contributing-factors" rows="3" style="min-height: 82px;" placeholder="List any extra factors making this issue worse"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="admin-rca-systemic-causes">Systemic causes</label>
+                  <textarea id="admin-rca-systemic-causes" rows="3" style="min-height: 82px;" placeholder="List planning, training, process, management, or system weaknesses underneath the issue"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 14px; padding: 14px;">
+              <textarea id="admin-action-internal-notes" class="hidden"></textarea>
+
+              <div class="portal-actions">
+  <button class="btn btn-primary" onclick="submitPhase1()">Submit Problem Area to Phase 1 Report</button>
+  <button class="btn" onclick="saveActionDetail()">Save Draft</button>
+  <button class="btn btn-danger" onclick="deleteAction()">Delete Action</button>
+</div>
+            </div>
+
+            <div id="admin-second-visit-card" class="card hidden" style="margin-top: 14px; padding: 14px;">
+              <div class="section-title">
+                <h4>Second Visit Questions</h4>
+                <span class="muted">Answer these on the second visit, then submit them back into the investigation</span>
+              </div>
+
+              <div id="admin-second-visit-questions-list" class="stack"></div>
+
+              <div id="admin-second-visit-submit-wrap" class="portal-actions hidden" style="margin-top: 14px;">
+  <button class="btn btn-primary" type="button" onclick="submitPhase2()">Complete Phase 2 and Move to Phase 3</button>
+</div>
+            </div>
+
+            <textarea id="admin-action-followup-questions" class="hidden"></textarea>
+            <textarea id="admin-action-client-input" class="hidden"></textarea>
+
+            <ul id="admin-action-issues-nextsteps-list" class="hidden"></ul>
+
+            <div id="admin-action-evidence-box" class="hidden"></div>
+
+            <div id="admin-action-message" class="status-message"></div>
+          </div>
+
+          <div id="admin-project-files-list" class="hidden"></div>
+
+          <div id="admin-project-activity-card" class="card hidden" style="margin-top: 14px; padding: 14px;">
+            <div class="section-title">
+              <h3>Project Activity</h3>
+              <span class="muted">Visible to client</span>
+            </div>
+            <div id="admin-project-notes-list" class="updates-list"></div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <script src="https://unpkg.com/pocketbase@0.21.5/dist/pocketbase.umd.js"></script>
-<script src="portal.pocketbase.js"></script>
-<script src="portal.utils.js"></script>
-<script src="portal.data.js"></script>
-<script src="portal.templates.js"></script>
-<script src="portal.client.js"></script>
-<script src="portal.admin.js"></script>
-<script src="portal.actions.js"></script>
-<script src="portal.js"></script>
+  <script src="portal.utils.js"></script>
+  <script src="portal.data.js"></script>
+  <script src="portal.templates.js"></script>
+  <script src="portal.client.js"></script>
+  <script src="portal.intelligence.js"></script>
+  <script src="portal.primeforge.js"></script>
+  <script src="portal.admin.js"></script>
+  <script src="portal.actions.js"></script>
+  <script src="portal.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {

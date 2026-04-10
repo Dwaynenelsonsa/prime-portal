@@ -1,38 +1,112 @@
-function item(text, category) {
+function item(text, category, responseType) {
   return {
     id: generateUniqueItemId(),
     text: text,
     category: category || 'General',
+    responseType: responseType || 'check',
     checked: false,
     status: 'unanswered',
+    answer: '',
     notes: '',
     source: 'template'
   };
 }
 
-function createAction(title, purpose, checks, questions, evidence, redFlags, suggestedFixes) {
-  const reviewPoints = []
-    .concat((checks || []).map(function(text) {
-      return item(text, 'Review');
-    }))
-    .concat((questions || []).map(function(text) {
-      return item(text, 'Review');
-    }));
+function getPriorityFromImpactType(impactType) {
+  const value = String(impactType || '').trim().toLowerCase();
+
+  if (value === 'safety' || value === 'production_stop' || value === 'compliance') {
+    return 'P1';
+  }
+
+  if (value === 'quality' || value === 'recurring_failure' || value === 'cost' || value === 'production_risk') {
+    return 'P2';
+  }
+
+  return 'P3';
+}
+
+function getPriorityReasonFromImpactType(impactType) {
+  const value = String(impactType || '').trim().toLowerCase();
+
+  if (value === 'safety') {
+    return 'Immediate health and safety risk or unsafe condition.';
+  }
+
+  if (value === 'production_stop') {
+    return 'Active production stoppage or immediate major output loss.';
+  }
+
+  if (value === 'compliance') {
+    return 'Active compliance, legal, or statutory control risk.';
+  }
+
+  if (value === 'quality') {
+    return 'Quality failure risk affecting product, customer, or rework levels.';
+  }
+
+  if (value === 'recurring_failure') {
+    return 'Repeat failure pattern affecting reliability and output.';
+  }
+
+  if (value === 'cost') {
+    return 'Major waste, cost, or efficiency issue needing control.';
+  }
+
+  if (value === 'production_risk') {
+    return 'High risk of near term disruption to production.';
+  }
+
+  return 'Improvement, training, structure, or longer term control gap.';
+}
+
+function createAction(title, purpose, checks, questions, evidence, redFlags, suggestedFixes, impactType) {
+  const reviewPoints = (checks || []).map(function(text) {
+    return item(text, 'Review', 'check');
+  });
+
+  const resolvedImpactType = String(impactType || 'improvement').trim().toLowerCase();
+  const resolvedPriority = getPriorityFromImpactType(resolvedImpactType);
+  const resolvedPriorityReason = getPriorityReasonFromImpactType(resolvedImpactType);
 
   return {
     id: generateUniqueActionId(),
     title: title,
     purpose: purpose,
+    impactType: resolvedImpactType,
+    priority: resolvedPriority,
+    priorityReason: resolvedPriorityReason,
+    workflowStatus: 'not_started',
     reviewPoints: reviewPoints,
-    evidence: evidence.map(function(text) {
-      return item(text, 'Evidence');
+    seedQuestions: Array.isArray(questions) ? questions.slice() : [],
+    evidence: (evidence || []).map(function(text) {
+      return item(text, 'Evidence', 'check');
     }),
-    redFlags: redFlags.slice(),
+    redFlags: (redFlags || []).slice(),
     suggestedFixes: (suggestedFixes || []).slice(),
     concernsFound: [],
     autoConcerns: [],
     nextSteps: [],
-    internalNotes: ''
+    internalNotes: '',
+    knownInfo: '',
+    missingInfo: '',
+    followUpQuestions: '',
+    followUpQuestionItems: [],
+    clientInput: '',
+    rcaProblemStatement: '',
+    rcaImmediateCause: '',
+    rcaWhy1: '',
+    rcaWhy2: '',
+    rcaWhy3: '',
+    rcaWhy4: '',
+    rcaWhy5: '',
+    rcaRootCause: '',
+    rcaContributingFactors: '',
+    rcaSystemicCauses: '',
+    findings: '',
+    recommendations: '',
+    nextImplementation: '',
+    implementationGuidance: ''
   };
 }
 

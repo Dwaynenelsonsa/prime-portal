@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prime Engineering Solutions | Practical Engineering Support</title>
-  <meta name="description" content="Prime Engineering Solutions helps manufacturers cut downtime, fix repeat failures, and build stronger engineering systems." />
+  <title>Prime Solutions | Practical Engineering Support</title>
+  <meta name="description" content="Prime Solutions helps manufacturers cut downtime, fix repeat failures, and build stronger engineering systems." />
   <style>
     :root {
       --bg: #0f172a;
@@ -168,12 +168,14 @@
       margin-bottom: 24px;
     }
 
-    .btn {
+        .btn {
       display: inline-block;
       padding: 14px 22px;
       border-radius: 12px;
       font-weight: 700;
       transition: 0.2s ease;
+      border: none;
+      cursor: pointer;
     }
 
     .btn-primary {
@@ -201,11 +203,12 @@
       gap: 14px;
     }
 
-    .stat-card,
+        .stat-card,
     .panel,
     .service,
     .step,
-    .contact-box {
+    .contact-box,
+    .proof-item {
       background: #fff;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -295,12 +298,14 @@
       background: var(--section);
     }
 
-    .proof-grid {
-      grid-template-columns: repeat(3, 1fr);
+      .proof-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 16px;
     }
 
-    .proof-item {
-      padding: 24px;
+        .proof-item {
+      padding: 18px;
       background: #fff;
       border-radius: var(--radius);
       border: 1px solid #e2e8f0;
@@ -308,13 +313,16 @@
     }
 
     .proof-item h3 {
-      font-size: 2rem;
-      margin-bottom: 8px;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
       color: var(--accent-dark);
+      line-height: 1.2;
     }
 
     .proof-item p {
       color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .steps {
@@ -346,16 +354,31 @@
     }
 
     .contact-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
     }
 
-    .contact-box {
+        .contact-box {
       padding: 28px;
     }
 
     .contact-box p {
       color: var(--muted);
       margin-bottom: 12px;
+    }
+
+        .contact-logo-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
+    }
+
+    .contact-logo-box img {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      object-fit: contain;
     }
 
     .contact-list {
@@ -367,9 +390,13 @@
       margin-top: 10px;
     }
 
-    form {
+        form {
       display: grid;
       gap: 14px;
+    }
+
+    form .btn {
+      width: 100%;
     }
 
     input, textarea {
@@ -427,7 +454,7 @@
 <body>
   <header>
     <div class="container nav">
-      <a href="#home" class="brand">Prime Engineering Solutions</a>
+      <a href="#home" class="brand">Prime Solutions</a>
       <nav class="nav-links">
   <a href="#about">About</a>
   <a href="#services">Services</a>
@@ -442,41 +469,41 @@
     <section class="hero" id="home">
       <div class="container hero-wrap">
         <div>
-          <span class="eyebrow">Practical engineering support for manufacturers</span>
-          <h1>Cut downtime, fix repeat failures, and build an engineering team that actually performs.</h1>
+                    <span class="eyebrow">Practical engineering and operations support</span>
+          <h1>Cut downtime, fix repeat failures, and bring more structure to engineering and operations.</h1>
           <p>
-            Prime Engineering Solutions helps food, manufacturing, and industrial sites get out of firefighting mode and into proper engineering control.
+            Prime Solutions helps business and manufacturing sites get out of firefighting mode and into proper operational and engineering control.
           </p>
           <div class="cta-row">
             <a href="#contact" class="btn btn-primary">Get In Touch</a>
             <a href="#services" class="btn btn-secondary">View Services</a>
           </div>
           <p>
-            Based in Meath and supporting businesses that need real help on maintenance, reliability, and engineering structure.
+            Supporting clients who need practical help, clearer systems, and real progress.
           </p>
         </div>
 
         <div class="hero-right">
           <div class="hero-logo-top">
-            <img src="logo.png" alt="Prime Engineering Solutions logo" />
+            <img src="logo.png" alt="Prime Solutions logo" style="display:block; width:320px; height:auto;" />
           </div>
 
-          <div class="hero-stats">
+            <div class="hero-stats">
             <div class="stat-card">
               <strong>15+</strong>
-              <span>Years of hands on engineering and operations experience</span>
+              <span>Years of hands on engineering, operations, and leadership experience</span>
             </div>
             <div class="stat-card">
               <strong>€2M</strong>
-              <span>Product loss saved through practical engineering action</span>
+              <span>Saved in product loss through practical engineering action and site support</span>
             </div>
             <div class="stat-card">
-              <strong>€1.2M</strong>
-              <span>Budget control experience with €20M CAPEX planning</span>
+              <strong>Custom Designed System</strong>
+              <span>Developed for operations & engineering by turning issues and actions into progress</span>
             </div>
             <div class="stat-card">
               <strong>88%</strong>
-              <span>Business growth delivered through practical improvement and leadership</span>
+              <span>Business growth delivered through practical improvement, structure, and leadership</span>
             </div>
           </div>
         </div>
@@ -486,7 +513,7 @@
     <section id="about">
       <div class="container">
         <div class="section-head">
-          <h2>Built by someone who has actually lived the problems</h2>
+          <h2>Built by someone who lived the problems</h2>
           <p>
             This is not generic consultancy. It is practical support for sites dealing with breakdown pressure, weak systems, poor planning, and constant production demands.
           </p>
@@ -495,7 +522,7 @@
         <div class="about-grid">
           <div class="panel">
             <p>
-              I bring practical engineering support based on real work across operations, maintenance, reliability, safety, and leadership.
+              Bringing practical support based on real work across engineering, operations, maintenance, reliability, safety, and leadership.
             </p>
             <p>
               The aim is simple. Help you regain control of downtime, tighten up the basics, and build an engineering function that works in the real world.
@@ -523,8 +550,8 @@
       <div class="container">
         <div class="section-head">
           <h2>Services</h2>
-          <p>
-            Straight up engineering support for sites that need structure, reliability, and better day to day control.
+                    <p>
+            Practical support for businesses that need better structure, reliability, and day to day control.
           </p>
         </div>
 
@@ -562,13 +589,13 @@
             </ul>
           </article>
 
-          <article class="service">
-            <h3>Support engineering leaders with practical advice</h3>
+                    <article class="service">
+            <h3>Support leaders with practical advice</h3>
             <p>Ongoing support for supervisors, managers, and business owners who need a solid second set of eyes.</p>
             <ul>
               <li>Site reviews and advice</li>
               <li>Leadership support</li>
-              <li>Project and CAPEX input</li>
+              <li>Project planning input</li>
               <li>Practical direction for teams under pressure</li>
             </ul>
           </article>
@@ -576,7 +603,7 @@
       </div>
     </section>
 
-    <section id="proof">
+        <section id="proof">
       <div class="container">
         <div class="section-head">
           <h2>Proven results</h2>
@@ -586,27 +613,21 @@
         </div>
 
         <div class="proof-grid">
-          <div class="proof-item">
+                    <div class="proof-item">
             <h3>15+</h3>
-            <p>Years across engineering, operations, maintenance, and leadership roles.</p>
+            <p>Years across engineering, operations, maintenance, and development.</p>
           </div>
           <div class="proof-item">
             <h3>€2M</h3>
-            <p>Saved in product loss through practical engineering action.</p>
+            <p>Saved in product loss through practical engineering action and site support.</p>
           </div>
           <div class="proof-item">
-            <h3>€1.2M</h3>
-            <p>Budget control experience with €20M CAPEX planning.</p>
-          </div>
-        </div>
-        <div class="proof-grid" style="margin-top: 22px;">
-          <div class="proof-item">
-            <h3>3</h3>
-            <p>Promotions in five years through performance and results.</p>
+            <h3>Custom Built System</h3>
+            <p>Developed to support operations and engineering by turning issues, priorities, and actions into clearer progress.</p>
           </div>
           <div class="proof-item">
             <h3>88%</h3>
-            <p>Business growth delivered through practical improvement and leadership.</p>
+            <p>Business growth delivered through practical improvement, structure, and leadership.</p>
           </div>
         </div>
       </div>
@@ -625,17 +646,17 @@
           <div class="step">
             <div class="num">1</div>
             <h3>Talk</h3>
-            <p>We go through your current issues, downtime pain points, and what is not working.</p>
+            <p>We go through your current issues, pain points, and what is not working.</p>
           </div>
           <div class="step">
             <div class="num">2</div>
             <h3>Review</h3>
-            <p>I assess the setup, look at weak spots, and identify the biggest opportunities first.</p>
+            <p>I assess the setup, identify weak spots, and focus on the biggest opportunities first.</p>
           </div>
           <div class="step">
             <div class="num">3</div>
-            <h3>Fix</h3>
-            <p>We put practical steps in place that your team can actually use and stick with.</p>
+            <h3>Improve</h3>
+            <p>We put practical steps in place that your team can use, follow, and build on.</p>
           </div>
         </div>
       </div>
@@ -646,19 +667,25 @@
         <div class="section-head">
           <h2>Let’s talk</h2>
           <p>
-            If your site is stuck in breakdown mode or your engineering setup needs work, get in touch.
+            If your business, site, or engineering setup needs practical support, get in touch.
           </p>
         </div>
 
-        <div class="contact-grid">
-          <div class="contact-box">
-            <h3>Contact Details</h3>
-            <p>Use the contact details below to get in touch. Keeping the location general is the better move for now.</p>
-            <ul class="contact-list">
-              <li>Phone: +353 87 191 3055</li>
-              <li>Location: Trim, Co. Meath, Ireland</li>
-              <li>Email: prime.engineering.solutions@outlook.com</li>
-            </ul>
+                <div class="contact-grid">
+          <div>
+            <div class="contact-box">
+              <h3>Contact Details</h3>
+              <p>Use the details below to get in touch.</p>
+              <ul class="contact-list">
+                <li>Phone: +353 87 191 3055</li>
+                <li>Location: Trim, Co. Meath, Ireland</li>
+                <li>Email: prime.engineering.solutions@outlook.com</li>
+              </ul>
+            </div>
+
+            <div class="contact-logo-box">
+              <img src="logo.png" alt="Prime Solutions logo" style="display:block; width:320px; height:auto;" />
+            </div>
           </div>
 
           <div class="contact-box">
@@ -678,8 +705,8 @@
 
   <footer>
     <div class="container footer-wrap">
-      <p>© 2026 Prime Engineering Solutions</p>
-      <p>Practical engineering support for manufacturers</p>
+      <p>© 2026 Prime Solutions</p>
+      <p>Practical support for manufacturers</p>
     </div>
   </footer>
 </body>
